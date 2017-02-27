@@ -1,0 +1,23 @@
+
+
+.module-folder__bar {
+  cursor: pointer;
+  background: #f5f5f5;
+  box-shadow: 0 0 1px 1px rgba(#333, .2);
+  padding: .75em 1em;
+  margin-bottom: 1.5rem;
+}
+
+.module-folder__bar:hover {
+  background: #fff;
+}
+
+.module-folder__title {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+
+.questions {
+  text-align: left;
+}

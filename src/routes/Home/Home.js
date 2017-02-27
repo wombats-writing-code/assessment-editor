@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
+const Spinner = require('react-spinkit')
+
 import './Home.scss'
 
 import ModuleFolder from '../../components/ModuleFolder'
@@ -13,23 +15,28 @@ class Home extends Component {
   render() {
     let props = this.props;
 
-    console.log('Home.js props', props);
+    let spinner = props.isGetQuestionsinProgress ?
+                  (<Spinner spinnerName="three-bounce" />) : null;
 
     return (
       <div>
         <div className="button-bar">
           {_.map(props.domains, domain => {
-            let selectedStyle = this.props.currentDomain === domain ? 'is-selected' : null;
+            let selectedStyle = props.currentDomain === domain ? 'is-selected' : null;
             return (
-              <button className={`button domain-button ${selectedStyle}`} onClick={() => props.onClickDomain(domain)}>{domain.displayName}</button>
+              <button key={domain.displayName}
+                      className={`button domain-button ${selectedStyle}`}
+                      onClick={() => props.onClickDomain(['outcome', 'module'], ['HAS_PARENT_OF', 'HAS_PREREQUISITE_OF'], domain, props.user)}>
+                {domain.displayName}
+              </button>
             )
           })}
         </div>
 
-        <div className="button-bar">
-          {_.map(props.modules, module => {
+        <div>
+          {_.map(props.mapping.modules, module => {
             return (
-              <ModuleFolder modules={props.modules} />
+              <ModuleFolder key={module.id} module={module} />
             )
           })}
         </div>

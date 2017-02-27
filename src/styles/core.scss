@@ -19,3 +19,53 @@ body {
 *:after {
   box-sizing: inherit;
 }
+
+button {
+  transition: none;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:disabled, button:disabled:hover {
+  cursor: default;
+  opacity: .5;
+}
+
+
+.flex-container {
+  display: flex;
+}
+
+.flex-container.align-center {
+  align-items: center;
+}
+
+.flex-container.align-top {
+  align-items: flex-start;;
+}
+
+.flex-container.align-bottom {
+  align-items: flex-end;
+}
+
+.flex-container.justify-center {
+  justify-content: center;
+}
+
+.flex-container.space-between {
+  justify-content: space-between;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.mute {
+  color: #666;
+}
+
+.light {
+  font-weight: 300;
+}

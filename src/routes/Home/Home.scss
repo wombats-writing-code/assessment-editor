@@ -1,3 +1,16 @@
+@import '../../styles/base';
+
+.domain-button {
+  background: #fff;
+  color: #333;
+}
+
+.domain-button:hover, .domain-button.is-selected {
+  background: $app-blue;
+  color: #fff;
+}
+
+
 .duck {
   display: block;
   width: 120px;
