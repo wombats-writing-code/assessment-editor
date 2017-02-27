@@ -12,6 +12,17 @@ export const selectQuestions = (state) => {
   return state.assessment.questions;
 }
 
+export const outcomesById = createSelector([
+  state => state.mapping.outcomes
+  ],
+  (outcomes) => {
+
+  return _.reduce(outcomes, (result, outcome) => {
+    result[outcome.id] = outcome;
+    return result;
+  }, {});
+});
+
 export const questionsByModule = createSelector([
   state => state.mapping,
   state => state.assessment.questions,
@@ -29,9 +40,9 @@ export const questionsByModule = createSelector([
 
     // console.log('moduleOutcomes', module.displayName, moduleOutcomes.length);
 
-    result[module.id] = _.filter(questions, q => {
+    result[module.id] = _.sortBy(_.filter(questions, q => {
       return moduleOutcomes.indexOf(q.outcome) > -1;
-    });
+    }), q => q.displayName.startsWith('Target'));;
 
     return result;
 

@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import _ from 'lodash';
 import $ from 'jquery';
 
-import Questions from '../Questions'
+import Question from '../Question'
 
 import './ModuleFolder.scss'
 
@@ -25,7 +25,13 @@ class ModuleFolder extends Component {
     if (this.state.isExpanded) {
       // console.log('should render questions', props.questionsByModule[props.module.id])
       questions = (
-        <Questions questions={props.questionsByModule[props.module.id]} />
+        <ul>
+          {_.map(props.questionsByModule[props.module.id], question => {
+            return (
+              <Question key={question.id} question={question} />
+            )
+          })}
+        </ul>
       )
     }
 
@@ -35,7 +41,7 @@ class ModuleFolder extends Component {
         <div className="module-folder__bar flex-container space-between"
               onClick={() => this.setState({isExpanded: !this.state.isExpanded})} >
           <p className="module-folder__title">{props.module.displayName}</p>
-          {/* <p>{props.module.displayName}</p> */}
+          <p className="module-folder__count">{props.questionsByModule[props.module.id].length} </p>
 
         </div>
 

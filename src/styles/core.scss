@@ -58,6 +58,10 @@ button:disabled, button:disabled:hover {
   justify-content: space-between;
 }
 
+.flex-container.space-around {
+  justify-content: space-around;
+}
+
 .bold {
   font-weight: 600;
 }

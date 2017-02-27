@@ -19,7 +19,7 @@ class Home extends Component {
                   (<Spinner spinnerName="three-bounce" />) : null;
 
     return (
-      <div>
+      <div className="row">
         <div className="button-bar">
           {_.map(props.domains, domain => {
             let selectedStyle = props.currentDomain === domain ? 'is-selected' : null;
@@ -33,7 +33,7 @@ class Home extends Component {
           })}
         </div>
 
-        <div>
+        <div className="large-10 large-centered columns">
           {_.map(props.mapping.modules, module => {
             return (
               <ModuleFolder key={module.id} module={module} />
