@@ -1,10 +1,11 @@
-import axios from 'axios'
 import _ from 'lodash'
 
-import {getHost} from '../utilities'
 import {GET_DOMAINS_OPTIMISTIC, GET_DOMAINS_SUCCESS} from './getDomains'
 import {GET_QUESTIONS_OPTIMISTIC, GET_QUESTIONS_SUCCESS} from './getQuestions'
 import {SELECT_DOMAIN} from './selectDomain'
+import {EDIT_QUESTION} from './editQuestion'
+import {CLOSE_EDIT_QUESTION} from './closeEditQuestion'
+
 // ------------------------------------
 // Reducer
 // ------------------------------------
@@ -40,6 +41,18 @@ export default function assessmentReducer (state = initialState, action) {
       return _.assign({}, state, {
         isGetQuestionsInProgress: false,
         questions: action.questions
+      })
+
+    case EDIT_QUESTION:
+      return _.assign({}, state, {
+        isEditInProgress: true,
+        editQuestionCopy: _.cloneDeep(action.question)
+      })
+
+    case CLOSE_EDIT_QUESTION:
+      return _.assign({}, state, {
+        isEditInProgress: false,
+        editQuestionCopy: null
       })
 
     default:

@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 
 import Question from './Question'
 import {outcomesById} from '../../selectors'
+import {editQuestion} from '../../reducers/assessment/editQuestion'
+
 
 const mapStateToProps = (state, ownProps) => {
   // console.log('state in QuestionContainer', state)
@@ -14,6 +16,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
+    onClickEdit: question => dispatch(editQuestion(question))
   }
 }
 

@@ -23,6 +23,30 @@ export const outcomesById = createSelector([
   }, {});
 });
 
+// export const questionsByModule = (mapping, questions) => {
+//
+//   if (!mapping || !mapping.modules) return null;
+//
+//
+//   let dict = _.reduce(mapping.modules, (result, module) => {
+//     let moduleOutcomes = _.map(_.filter(mapping.outcomes, outcome => {
+//       let hasParent = _.find(mapping.relationships, {sourceId: outcome.id, targetId: module.id});
+//       return hasParent;
+//     }), 'id');
+//
+//     // console.log('moduleOutcomes', module.displayName, moduleOutcomes.length);
+//
+//     result[module.id] = _.sortBy(_.filter(questions, q => {
+//       return moduleOutcomes.indexOf(q.outcome) > -1;
+//     }), q => q.displayName.startsWith('Target'));;
+//
+//     return result;
+//
+//   }, {});
+//
+//   return dict;
+// }
+
 export const questionsByModule = createSelector([
   state => state.mapping,
   state => state.assessment.questions,

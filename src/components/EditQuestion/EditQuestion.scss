@@ -1,0 +1,32 @@
+@import '../../styles/base';
+
+.contained-label {
+  position: relative;
+}
+
+.contained-label__input {
+    height: 4.5rem;
+    padding-top: 1.4em;
+    padding-left: .5rem;
+    margin-bottom: 1.5rem;
+}
+
+.contained-label__input:focus {
+  border-color: 1px solid $app-blue;
+}
+
+.contained-label__label {
+  font-weight: 600;
+  font-size: .9em;
+  position: absolute;
+  top: .4em;
+  left: .52rem;
+}
+
+.form__label {
+  font-weight: 600;
+}
+
+.rich-text-editor {
+  margin-bottom: 1.5rem;
+}

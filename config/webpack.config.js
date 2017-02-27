@@ -16,6 +16,7 @@ const webpackConfig = {
   target  : 'web',
   devtool : project.compiler_devtool,
   resolve : {
+    moduleDirectories: ["web_modules", "node_modules"],
     root       : project.paths.client(),
     extensions : ['', '.js', '.jsx', '.json']
   },
@@ -114,16 +115,23 @@ if (!__TEST__) {
   )
 }
 
+webpackConfig.plugins.push(
+  new webpack.ProvidePlugin({
+    ckeditor: 'ckeditor'
+  })
+)
+
 // ------------------------------------
 // Loaders
 // ------------------------------------
 // JavaScript / JSON
 webpackConfig.module.loaders = [{
   test    : /\.(js|jsx)$/,
-  exclude : /node_modules/,
+  exclude : /node_modules|web_modules/,
   loader  : 'babel',
   query   : project.compiler_babel
-}, {
+},
+{
   test   : /\.json$/,
   loader : 'json'
 }]

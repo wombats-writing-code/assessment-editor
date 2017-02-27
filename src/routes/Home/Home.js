@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-const Spinner = require('react-spinkit')
+import Spinner from 'react-spinkit'
+
+import ModuleFolder from '../../components/ModuleFolder'
+import EditQuestion from '../../components/EditQuestion'
 
 import './Home.scss'
 
-import ModuleFolder from '../../components/ModuleFolder'
 
 class Home extends Component {
 
@@ -33,6 +35,8 @@ class Home extends Component {
           })}
         </div>
 
+        {spinner}
+
         <div className="large-10 large-centered columns">
           {_.map(props.mapping.modules, module => {
             return (
@@ -40,6 +44,8 @@ class Home extends Component {
             )
           })}
         </div>
+
+        <EditQuestion />
 
       </div>
     )

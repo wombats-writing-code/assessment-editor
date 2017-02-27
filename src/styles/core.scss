@@ -5,6 +5,7 @@
 // Just remove them if they're not what you want
 html {
   box-sizing: border-box;
+  font-size: 90%;
 }
 
 html,
@@ -31,6 +32,14 @@ button:focus {
 button:disabled, button:disabled:hover {
   cursor: default;
   opacity: .5;
+}
+
+input {
+  width: 100%;
+}
+
+input, input:focus {
+  outline: none;
 }
 
 
@@ -72,4 +81,12 @@ button:disabled, button:disabled:hover {
 
 .light {
   font-weight: 300;
+}
+
+.no-left-padding {
+  padding-left: 0
+}
+
+.no-right-padding {
+  padding-right: 0;
 }

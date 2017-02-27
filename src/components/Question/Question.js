@@ -18,9 +18,9 @@ class Question extends Component {
   }
 
   componentDidMount() {
-    if (window.MathJax) {
-      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-    }
+    // if (window.MathJax) {
+    //   MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    // }
   }
 
   _renderChoice(choice, idx) {
@@ -40,32 +40,58 @@ class Question extends Component {
 
     if (!props.question) return null;
 
-    let questionBody;
+    let questionButtons, questionBody, outcomeBody;
     if (this.state.isExpanded) {
       // console.log('question', props.question);
+      questionButtons = (
+        <div className="flex-container space-around">
+          <p className="mute small">ID: {props.question.id}</p>
+          <button className="button question__bar__button flex-container space-between"
+                  onClick={() => props.onClickEdit(props.question)}>
+            Edit &nbsp;
+            <img src={require('./assets/pencil.png')}/>
+          </button>
+          <button className="button question__bar__button flex-container space-between">
+            Copy &nbsp;
+            <img src={require('./assets/copy.png')}/>
+          </button>
+          <button className="button question__bar__button warning flex-container space-between">
+            Delete &nbsp;
+            <img src={require('./assets/delete.png')}/>
+          </button>
+        </div>
+      )
+
       questionBody = (
         <div className="text-left">
-          <div className="flex-container space-around">
-            <p className="mute small">ID: {props.question.id}</p>
-            <button className="button question__bar__button flex-container space-between">
-              Edit &nbsp;
-              <img src={require('./assets/pencil.png')}/>
-            </button>
-            <button className="button question__bar__button flex-container space-between">
-              Copy &nbsp;
-              <img src={require('./assets/copy.png')}/>
-            </button>
-            <button className="button question__bar__button warning flex-container space-between">
-              Delete &nbsp;
-              <img src={require('./assets/delete.png')}/>
-            </button>
-          </div>
-
-
           <div className="question-content" dangerouslySetInnerHTML={{__html: props.question.text}}></div>
 
           {_.map(props.question.choices, (choice, idx) => {
             return this._renderChoice(choice, idx);
+          })}
+        </div>
+      )
+
+      outcomeBody = (
+        <div>
+          <p className="bold">Outcomes</p>
+          <p className="">{outcomeId ? props.outcomesById[outcomeId].displayName : null}</p>
+
+          {_.map(props.question.choices, (choice, idx) => {
+            let confusedOutcomeId = choice.confusedOutcomes[0];
+
+            return (
+              <div key={`choice-outcome-${choice.choiceId}`} className="flex-container align-top">
+                <span className="alphabet-label">
+                  {Alphabet[idx]}&#x00029;
+                </span>
+                <p className="small">
+                  {confusedOutcomeId ? props.outcomesById[confusedOutcomeId].displayName : '--'}
+                  <span></span>
+                  <img className="button outcome-link-button" src={require('./assets/unlink.png')} />
+                </p>
+              </div>
+            )
           })}
         </div>
       )
@@ -80,33 +106,18 @@ class Question extends Component {
         </div>
 
         <div className="row">
+          {questionButtons}
+        </div>
+
+        <div className="row">
           <div className="medium-7 columns">
             {questionBody}
           </div>
 
           <div className="medium-5 columns text-left">
-            <p className="bold">Outcomes</p>
-            <p className="">{outcomeId ? props.outcomesById[outcomeId].displayName : null}</p>
-
-            {_.map(props.question.choices, (choice, idx) => {
-              let confusedOutcomeId = choice.confusedOutcomes[0];
-
-              return (
-                <div key={`choice-outcome-${choice.choiceId}`} className="flex-container align-top">
-                  <span className="alphabet-label">
-                    {Alphabet[idx]}&#x00029;
-                  </span>
-                  <p className="small">
-                    {confusedOutcomeId ? props.outcomesById[confusedOutcomeId].displayName : '--'}
-                    <span></span>
-                    <img className="button outcome-link-button" src={require('./assets/unlink.png')} />
-                  </p>
-                </div>
-              )
-            })}
+            {outcomeBody}
           </div>
         </div>
-
 
       </div>
     )
