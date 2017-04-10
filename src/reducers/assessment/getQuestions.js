@@ -25,10 +25,7 @@ export function getQuestions(domain, user) {
     dispatch(getQuestionsOptimistic())
 
     return axios({
-      url: `${getHost()}/l4/questions?domainId=${domain.id}`,
-      headers: {
-        'x-fbw-user': user.id
-      }
+      url: `${getHost()}/api/questions?domainId=${domain.id}`,
     })
     .then( res => {
       dispatch(getQuestionsSuccess(res.data))

@@ -29,25 +29,20 @@ export default (initialState = {}) => {
   // copy state to local storage
   enhancers.push(persistState(null, {
     slicer: paths => state => {
-      // if (state) {
-      //   let subset = {
-      //     course: state.course,
-      //     result: _.omit(state.result, [
-      //       'isGetResultsInProgress',
-      //     ]),
-      //     mapping: state.mapping,
-      //     mission: _.assign({}, state.mission, {
-      //       currentTarget: null,
-      //       isGetMissionInProgress: false,
-      //       isGetMissionsInProgress: false
-      //     }),
-      //     login: state.login,
-      //     location: state.location,
-      //     view: state.view
-      //   };
-      //
-      //   return subset;
-      // }
+      if (state) {
+        // console.log('state.assessment in persistState', state.assessment)
+
+        let subset = {
+          assessment: _.omit(state.assessment,
+            ['isGetQuestionsInProgress', 'isEditInProgress', 'isLinkOutcomeInProgress', 'isSaveQuestionInProgress']
+          ),
+          mapping: state.mapping,
+          login: state.login,
+          location: state.location,
+        };
+
+        return subset;
+      }
 
       return state;
     },

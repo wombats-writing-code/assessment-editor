@@ -8,7 +8,7 @@
 .question__bar {
   padding: .75em 1em;
   text-align: left;
-  background: #fcfcfc;
+  background: #f8f8f8;
   box-shadow: 0 0 1px 1px rgba(#333, .2);
   margin-bottom: 1.5rem;
   cursor: pointer;
@@ -16,7 +16,7 @@
 }
 
 .question__bar:hover {
-  background: #fafafa;
+  background: #fff;
 }
 
 .question__title {
@@ -56,4 +56,16 @@
 
 .alphabet-label {
   margin-right: 1em;
+}
+
+.outcome-link-button, .outcome-link-button:focus {
+  padding: .5em;
+  border: 1px solid #ccc;
+  margin-left: 2em;
+  margin-bottom: 0;
+  background: transparent;
+}
+
+.outcome-link-button:hover {
+  border-color: #aaa;
 }

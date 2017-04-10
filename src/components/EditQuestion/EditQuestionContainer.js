@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { connect } from 'react-redux'
 import EditQuestion from './EditQuestion'
 import {closeEditQuestion} from '../../reducers/assessment/closeEditQuestion'
+import {updateQuestion} from '../../reducers/assessment/updateQuestion'
 
 const mapStateToProps = (state, ownProps) => {
   // console.log('state in EditQuestionContainer', state)
@@ -14,7 +15,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onClickClose: () => dispatch(closeEditQuestion())
+    onClickClose: () => dispatch(closeEditQuestion()),
+    onUpdateQuestion: (question) => dispatch(updateQuestion(question))
   }
 }
 

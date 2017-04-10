@@ -2,7 +2,7 @@
 
 export const getHost = () => {
   if (location.host.indexOf('localhost') > -1) {
-    return 'http://localhost:8888'
+    return 'http://localhost:9999'
 
   } else if (location.host.indexOf('-dev') > -1) {
     return 'https://fbw-web-backend-dev.herokuapp.com'

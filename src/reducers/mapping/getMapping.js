@@ -29,10 +29,6 @@ export function getMapping(data) {
     throw TypeError('entityTypes must be provided')
   }
 
-  if (!data.user) {
-    throw TypeError('user must be provided to getMapping')
-  }
-
   let relationshipTypesString = arrayEncode(data.relationshipTypes, 'relationships')
   let entityTypesString = arrayEncode(data.entityTypes, 'entities')
 
@@ -41,10 +37,7 @@ export function getMapping(data) {
     dispatch(getMappingOptimistic())
 
     return axios({
-      url: `${getHost()}/l4/mapping?domainId=${data.domain.id}${entityTypesString}${relationshipTypesString}`,
-      headers: {
-        'x-fbw-user': data.user.id
-      }
+      url: `${getHost()}/api/mapping?domainId=${data.domain.id}${entityTypesString}${relationshipTypesString}`,
     })
     .then( res => {
       dispatch(getMappingSuccess(res.data))

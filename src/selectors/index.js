@@ -1,11 +1,7 @@
 import { createSelector } from 'reselect'
 
 export const selectUser = (state) => {
-  let temp = {
-    id: 'dev-editor',
-    displayName: 'dev editor'
-  }
-  return state.login.user || temp;
+  return state.login.user;
 }
 
 export const selectQuestions = (state) => {
@@ -66,11 +62,17 @@ export const questionsByModule = createSelector([
 
     result[module.id] = _.sortBy(_.filter(questions, q => {
       return moduleOutcomes.indexOf(q.outcome) > -1;
-    }), q => q.displayName.startsWith('Target'));;
+    }), q => q.displayName.startsWith('Target'));
+
+    result['Uncategorized'] = _.filter(questions, {outcome: null})
+
+    // console.log('result', result)
 
     return result;
 
   }, {});
+
+  // console.log('dict', dict)
 
   return dict;
 });

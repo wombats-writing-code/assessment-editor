@@ -13,14 +13,15 @@ class Question extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isExpanded: true
+      // isExpanded: true
+      isExpanded: false
     }
   }
 
-  componentDidMount() {
-    // if (window.MathJax) {
-    //   MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-    // }
+  componentDidUpdate() {
+    if (window.MathJax) {
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
   }
 
   _renderChoice(choice, idx) {
@@ -46,16 +47,17 @@ class Question extends Component {
       questionButtons = (
         <div className="flex-container space-around">
           <p className="mute small">ID: {props.question.id}</p>
-          <button className="button question__bar__button flex-container space-between"
+          <button className="button question__bar__button flex-container space-between align-center"
                   onClick={() => props.onClickEdit(props.question)}>
             Edit &nbsp;
             <img src={require('./assets/pencil.png')}/>
           </button>
-          <button className="button question__bar__button flex-container space-between">
+          <button className="button question__bar__button flex-container space-between align-center"
+                  onClick={() => props.onClickCopy(props.question)}>
             Copy &nbsp;
             <img src={require('./assets/copy.png')}/>
           </button>
-          <button className="button question__bar__button warning flex-container space-between">
+          <button className="button question__bar__button warning flex-container space-between align-center">
             Delete &nbsp;
             <img src={require('./assets/delete.png')}/>
           </button>
@@ -72,13 +74,30 @@ class Question extends Component {
         </div>
       )
 
+      let outcomeId = props.question.outcome;
+
       outcomeBody = (
         <div>
           <p className="bold">Outcomes</p>
-          <p className="">{outcomeId ? props.outcomesById[outcomeId].displayName : null}</p>
+          <p className="">
+            <b>Q: </b>
+            {outcomeId ? props.outcomesById[outcomeId].displayName : null}
+            <img className="button outcome-link-button" src={require('./assets/unlink.png')}
+                  onClick={() => props.onClickLinkOutcome(props.outcomesById[outcomeId], props.question, null)}
+            />
+          </p>
 
           {_.map(props.question.choices, (choice, idx) => {
             let confusedOutcomeId = choice.confusedOutcomes[0];
+
+            let linkButton;
+            if (idx > 0) {
+              linkButton = (
+                <img className="button outcome-link-button" src={require('./assets/unlink.png')}
+                      onClick={() => props.onClickLinkOutcome(props.outcomesById[confusedOutcomeId], props.question, choice)}
+                />
+              )
+            }
 
             return (
               <div key={`choice-outcome-${choice.choiceId}`} className="flex-container align-top">
@@ -87,8 +106,7 @@ class Question extends Component {
                 </span>
                 <p className="small">
                   {confusedOutcomeId ? props.outcomesById[confusedOutcomeId].displayName : '--'}
-                  <span></span>
-                  <img className="button outcome-link-button" src={require('./assets/unlink.png')} />
+                  {linkButton}
                 </p>
               </div>
             )
@@ -97,7 +115,6 @@ class Question extends Component {
       )
     }
 
-    let outcomeId = props.question.outcome;
 
     return (
       <div className="question">

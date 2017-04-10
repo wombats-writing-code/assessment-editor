@@ -101,6 +101,7 @@
     "react-modal": "^1.6.5",
     "react-redux": "^5.0.1",
     "react-router": "^3.0.0",
+    "react-select": "^1.0.0-rc.3",
     "react-spinkit": "^2.1.1",
     "react-spinner": "^0.2.6",
     "redux": "^3.6.0",
@@ -112,6 +113,7 @@
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.14",
+    "xoces": "^1.1.6",
     "yargs": "^6.3.0"
   },
   "devDependencies": {

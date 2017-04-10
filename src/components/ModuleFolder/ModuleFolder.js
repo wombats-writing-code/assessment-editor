@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import _ from 'lodash';
-import $ from 'jquery';
+import Spinner from 'react-spinkit'
 
 import Question from '../Question'
 
@@ -21,6 +21,7 @@ class ModuleFolder extends Component {
 
     // console.log('props of module-folder', props)
 
+    let isSaveQuestionInProgressIndicator;
     let questions;
     if (this.state.isExpanded) {
       // console.log('should render questions', props.questionsByModule[props.module.id])
@@ -33,6 +34,12 @@ class ModuleFolder extends Component {
           })}
         </ul>
       )
+
+      if (props.isSaveQuestionInProgress) {
+        isSaveQuestionInProgressIndicator = (
+          <p className="fade-in-out text-center margin-top muted">Creating new question...</p>
+        )
+      }
     }
 
 
@@ -42,11 +49,11 @@ class ModuleFolder extends Component {
               onClick={() => this.setState({isExpanded: !this.state.isExpanded})} >
           <p className="module-folder__title">{props.module.displayName}</p>
           <p className="module-folder__count">{props.questionsByModule[props.module.id].length} </p>
-
         </div>
 
-        {questions}
+        {props.isSaveQuestionInProgress ? isSaveQuestionInProgressIndicator : null}
 
+        {questions}
       </div>
     )
   }

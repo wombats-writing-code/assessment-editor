@@ -9,7 +9,8 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     currentModule: state.mapping.currentModule,
-    questionsByModule: questionsByModule(state)
+    questionsByModule: questionsByModule(state),
+    isSaveQuestionInProgress: state.assessment.isSaveQuestionInProgress,
     // questionsByModule: questionsByModule(state.mapping, state.assessment.questions)
   }
 }
