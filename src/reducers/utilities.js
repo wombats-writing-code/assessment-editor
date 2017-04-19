@@ -5,9 +5,9 @@ export const getHost = () => {
     return 'http://localhost:9999'
 
   } else if (location.host.indexOf('-dev') > -1) {
-    return 'https://fbw-web-backend-dev.herokuapp.com'
+    return 'https://openmantle-env.us-east-1.elasticbeanstalk.com'
 
   } else if (location.host.indexOf('mapping.mit.edu') > -1) {
-    return 'https://fbw-web-backend.herokuapp.com';
+    return 'https://openmantle-env.us-east-1.elasticbeanstalk.com';
   }
 }

@@ -10,20 +10,8 @@ const Alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
 import Quill from 'quill'
 
 import toolbarOptions from './toolbarOptions'
-const CK = window.CKEDITOR
-CK.plugins.addExternal( 'uploadwidget', 'https://s3.amazonaws.com/fly-by-wire-assessments/editor-assets/', 'uploadwidget.js' );
-CK.plugins.addExternal( 'uploadimage', 'https://s3.amazonaws.com/fly-by-wire-assessments/editor-assets/', 'uploadimage.js' );
+let CK;
 
-CK.config.mathJaxLib = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-CK.config.height = '6em';
-CK.config.extraPlugins = 'uploadwidget,uploadimage';
-
-// CK.config.filebrowserBrowseUrl = '/browser/browse.php';
-// CK.config.filebrowserUploadUrl = '/uploader/upload.php';
-// CK.config.filebrowserUploadUrl = `${getHost()}/uploader/upload`;
-CK.config.uploadUrl = `${getHost()}/uploader/upload`;
-
-console.log('CK', CK)
 
 class EditQuestion extends Component {
 
@@ -35,55 +23,73 @@ class EditQuestion extends Component {
     }
 
     this.choiceContainers = [];
+
+    CK = window.CKEDITOR
+    // console.log('CK', CK)
+    if (CK) {
+      CK.plugins.addExternal( 'uploadwidget', 'https://s3.amazonaws.com/fly-by-wire-assessments/editor-assets/', 'uploadwidget.js' );
+      CK.plugins.addExternal( 'uploadimage', 'https://s3.amazonaws.com/fly-by-wire-assessments/editor-assets/', 'uploadimage.js' );
+
+      CK.config.mathJaxLib = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+      CK.config.height = '6em';
+      CK.config.extraPlugins = 'uploadwidget,uploadimage';
+
+      // CK.config.filebrowserBrowseUrl = '/browser/browse.php';
+      // CK.config.filebrowserUploadUrl = '/uploader/upload.php';
+      // CK.config.filebrowserUploadUrl = `${getHost()}/uploader/upload`;
+      CK.config.uploadUrl = `${getHost()}/uploader/upload`;
+    }
   }
 
   componentDidMount() {
     this._initCKEditor();
   }
 
-  componentDidUpdate() {
-    // console.log('componentDidUpdate', this.questionTextContainer);
-    // console.log('CK.config', CK.config);
+  // componentWillReceiveProps(nextProps) {
+  //   if (this.props.question.choices !== nextProps.question.choices) {
+  //     this.choiceContainers = []
+  //   }
+  // }
 
+  componentDidUpdate(prevProps) {
+    // console.log('componentDidUpdate', this.questionTextContainer);
     if (!this.props.question) return false;
 
-    this._initCKEditor();
-  }
+    // upodating is done in the reducers
 
-  componentWillUnmount() {
-    console.log('componentWillUnmount')
-    let text = CK.instances.questionTextContainer;
+    if (!prevProps.question ||
+        prevProps.question.text !== this.props.question.text ||
+        prevProps.question.feedback !== this.props.question.feedback ||
+        prevProps.question.choices !== this.props.question.choices) {
 
-    if (text) {
-      console.log('destroying text')
-      text.destroy(true);
+      setTimeout( () => {
+        this.choiceContainers = $('.choice-container');
+        // console.log('this.choices', this.props.question.choices)
+        // console.log('this.choiceContainers in componentDidUpdate', this.choiceContainers);
+
+        let choiceContainerIds = _.map(this.choiceContainerIds, 'id');
+
+        // go through all the instances of CK editor. If an editor exists but choice doesn't, remove it
+        _.forEach(CK.instances, editor => {
+          // console.log('editor', editor);
+          if (choiceContainerIds.indexOf(editor.id) === -1) {
+            editor.destroy(true)
+          }
+        })
+
+        this._initCKEditor();
+      }, 100)
     }
-
-    let feedback = CK.instances.solutionExplanationContainer;
-    if (feedback) {
-      console.log('destroying feedback')
-      feedback.destroy(true)
-    }
-
-    let choices = _.map(this.choiceContainers, (el, idx) => {
-      let containerId = `choiceContainer-${idx}`;
-      let choiceEditor = CK.instances[el.id];
-      if (choiceEditor) {
-        console.log('destroying choiceEditor')
-        choiceEditor.destroy(true)
-      }
-    });
   }
 
   _initCKEditor() {
-    if (this.questionTextContainer) {
+    if (this.questionTextContainer && !CK.instances.questionTextContainer) {
       let instance = CK.replace('questionTextContainer', {
         extraPlugins: 'mathjax,uploadimage'
       });
 
-      // console.log('questionTextContainer instance', instance)
-
       instance.setData(this.props.question.text);
+      instance.on('change', () => this._onEditorChange(instance));
 
       // instance.on( 'fileUploadRequest', function( evt ) {
       //   console.log('file upload request in progress', evt)
@@ -94,28 +100,59 @@ class EditQuestion extends Component {
       // });
     }
 
-    if (this.solutionExplanationContainer) {
+    if (this.solutionExplanationContainer && !CK.instances.solutionExplanationContainer) {
       let instance = CK.replace('solutionExplanationContainer', {
         extraPlugins: 'mathjax,uploadimage'
       });
       instance.config.height = '15em'
 
       instance.setData(this.props.question.feedback);
+
+      console.log('solutionExplanationContainer')
     }
 
-    if (this.choiceContainers.length > 0) {
-      _.forEach(this.choiceContainers, (el, idx) => {
-        if (el) {
-          let instance = CK.replace(el.id, {
-            extraPlugins: 'mathjax,uploadimage'
-          });
+    // console.log('this.choiceContainers', this.choiceContainers, 'choices', this.props.question.choices)
 
-          instance.setData(this.props.question.choices[idx].text)
-        }
-      })
-    }
+    _.forEach(this.choiceContainers, (el, idx) => {
+      // console.log('choiceContainer', el)
+
+      if (el && !CK.instances[el.id]) {
+        let instance = CK.replace(el.id, {
+          extraPlugins: 'mathjax,uploadimage'
+        });
+
+        instance.setData(this.props.question.choices[idx].text)
+      }
+    })
   }
 
+  componentWillUnmount() {
+    // console.log('componentWillUnmount')
+    let text = CK.instances.questionTextContainer;
+
+    if (text) {
+      // console.log('destroying text')
+      text.destroy(true);
+    }
+
+    let feedback = CK.instances.solutionExplanationContainer;
+    if (feedback) {
+      // console.log('destroying feedback')
+      feedback.destroy(true)
+    }
+
+    _.forEach(this.choiceContainers, (el, idx) => {
+      // console.log('choiceContainer', el)
+      if (!el) return;
+
+      let containerId = `choiceContainer-${idx}`;
+      let choiceEditor = CK.instances[el.id];
+      if (choiceEditor) {
+        // console.log('destroying choiceEditor')
+        choiceEditor.destroy(true)
+      }
+    });
+  }
 
   render() {
     let props = this.props;
@@ -164,7 +201,7 @@ class EditQuestion extends Component {
 
               deleteButton = (
                 <button className="button delete-choice-button"
-                        onClick={(e) => {e.preventDefault(); props.onDeleteChoice(choice); }}>
+                        onClick={(e) => {e.preventDefault(); props.onDeleteChoice(choice, idx); }}>
                   Delete choice</button>
               )
             }
@@ -175,27 +212,51 @@ class EditQuestion extends Component {
                   {choiceLabel}
                   {deleteButton}
                 </div>
-                <textarea id={`choiceContainer-${idx}`}
+                <textarea id={`choiceContainer-${idx}`} className="choice-container"
                           ref={(el) => this.choiceContainers.push(el)} ></textarea>
               </div>
 
             )
           })}
 
+          <button className="button add-choice-button"
+                  onClick={(e) => {e.preventDefault(); props.onAddChoice(props.question.choices)}}>
+                  Add a wrong answer
+          </button>
+
           <div className="flex-container">
             <button className="button" onClick={(e) => {e.preventDefault(); props.onClickClose()}}>Cancel</button>
-            <button className="button form__save-button" onClick={(e) => this._onClickSubmit(e)}>Save</button>
+            <button className="button form__save-button" disabled={props.isSaveInProgress}
+                    onClick={(e) => this._onClickSubmit(e)}>
+              {props.isSaveInProgress ? 'Working...' : 'Save'}
+            </button>
           </div>
         </form>
       </Modal>
     )
   }
 
+  _onEditorChange(editor) {
+    console.log('editor', editor);
+    let content = editor.getData();
+    console.log('content', content)
+
+    let elName = editor.name;
+    switch(elName) {
+      case 'questionTextContainer':
+        this.props.onChangeQuestionField({
+          text: content
+        })
+
+    }
+    // update props.questionCopy with text content from the given editor
+  }
+
   _onClickSubmit(e) {
-    // console.log('click submit!')
     e.stopPropagation();
     e.preventDefault();
 
+    // get text content from inside the editor
     let text = CK.instances.questionTextContainer.getData();
     let feedback = CK.instances.solutionExplanationContainer.getData();
     let choices = _.map(this.props.question.choices, (choice, idx) => {
@@ -218,10 +279,14 @@ class EditQuestion extends Component {
       choices
     });
 
-    console.log('question', question)
+    // console.log('question', question)
 
-    this.props.onUpdateQuestion(question);
+    if (this.props.editType === 'new') {
+      this.props.onCreateQuestion(question);
 
+    } else {
+      this.props.onUpdateQuestion(question);
+    }
   }
 }
 

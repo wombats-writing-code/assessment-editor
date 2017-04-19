@@ -9,7 +9,7 @@ import {GET_MAPPING_OPTIMISTIC, GET_MAPPING_SUCCESS} from './getMapping'
 // ------------------------------------
 const initialState = {
 }
-export default function assessmentReducer (state = initialState, action) {
+export default function mappingReducer (state = initialState, action) {
   switch (action.type) {
     case GET_MAPPING_OPTIMISTIC:
       return _.assign({}, state, {

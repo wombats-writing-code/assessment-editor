@@ -1,0 +1,38 @@
+
+.question-toolbar {
+  background: #f8f8f8;
+  padding: .75em 1em .5em 1em;
+  margin-bottom: 1.5rem;
+}
+
+.confirm-delete-input {
+  padding: .5em .5em;
+  margin-bottom: 1.5rem;
+}
+
+.question__bar__button, .question__bar__button:focus {
+  padding: .5em .75em;
+  margin-bottom: .5rem;
+  width: auto;
+  font-size: .875em;
+  color: #444;
+  font-weight: 600;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+}
+
+.confirm-delete-button {
+  margin-right: 1em;
+  margin-bottom: 0rem;
+}
+
+.question__bar__button:not(:last-of-type) {
+  margin-right: 1em;
+}
+
+.question__bar__button:hover {
+  color: #000;
+  background: #f0f0f0;
+  border-color: transparent;
+}

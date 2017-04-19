@@ -1,15 +1,31 @@
-
+@import '../../styles/base';
 
 .module-folder__bar {
-  cursor: pointer;
   background: #f8f8f8;
   box-shadow: 0 0 1px 1px rgba(#333, .2);
   padding: .75em 1em;
   margin-bottom: 1.5rem;
 }
 
-.module-folder__bar:hover {
-  background: #fff;
+.module-folder--uncategorized .module-folder__bar {
+  background: rgba($app-red, .15);
+}
+
+.module-folder--uncategorized .module-folder__bar:hover {
+  background: rgba($app-red, .15);
+}
+
+.module-folder__show-hide {
+  margin-right: 1em;
+  font-size: .875rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: $app-blue;
+  margin-bottom: 0;
+}
+
+.module-folder__show-hide:hover {
+  color: lighten($app-blue, 20%);
 }
 
 .module-folder__title {
@@ -31,4 +47,15 @@
   width: 1.5rem;
   height: 1.5rem;
   margin-bottom: 0;
+}
+
+.module-folder__tree {
+  cursor: pointer;
+  margin-right: 1em;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.module-folder__tree:hover {
+  opacity: .8;
 }

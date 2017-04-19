@@ -6,7 +6,9 @@ import { connect } from 'react-redux'
 import {getDomains} from '../../reducers/assessment/getDomains'
 import {getQuestions} from '../../reducers/assessment/getQuestions'
 import {selectDomain} from '../../reducers/assessment/selectDomain'
+import {newQuestion} from '../../reducers/assessment/createQuestion'
 import {getMapping} from '../../reducers/mapping/getMapping'
+
 import {selectUser, selectQuestions} from '../../selectors/'
 
 const mapStateToProps = (state, ownProps) => {
@@ -16,6 +18,7 @@ const mapStateToProps = (state, ownProps) => {
     user: selectUser(state),
     domains: state.assessment.domains,
     currentDomain: state.assessment.currentDomain,
+    currentModule: state.assessment.currentModule,
     mapping: state.mapping,
     questions: selectQuestions(state),
     isGetQuestionsInProgress: state.assessment.isGetQuestionsInProgress,
@@ -36,6 +39,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       }));
       dispatch(getQuestions(domain, user));
     },
+    onClickNewQuestion: (domain) => dispatch(newQuestion(domain)),
     onSelectModule: module => {
 
     }

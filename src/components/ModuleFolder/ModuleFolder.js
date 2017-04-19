@@ -8,14 +8,6 @@ import './ModuleFolder.scss'
 
 class ModuleFolder extends Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isExpanded: false,
-    }
-  }
-
-
   render() {
     let props = this.props;
 
@@ -23,7 +15,7 @@ class ModuleFolder extends Component {
 
     let isSaveQuestionInProgressIndicator;
     let questions;
-    if (this.state.isExpanded) {
+    if (props.currentModule && props.currentModule.id === props.module.id) {
       // console.log('should render questions', props.questionsByModule[props.module.id])
       questions = (
         <ul>
@@ -44,11 +36,20 @@ class ModuleFolder extends Component {
 
 
     return (
-      <div>
-        <div className="module-folder__bar flex-container space-between"
-              onClick={() => this.setState({isExpanded: !this.state.isExpanded})} >
+      <div className={props.className}>
+        <div className="module-folder__bar flex-container space-between">
           <p className="module-folder__title">{props.module.displayName}</p>
-          <p className="module-folder__count">{props.questionsByModule[props.module.id].length} </p>
+
+          <div className="flex-container">
+            <p className="module-folder__show-hide"
+              onClick={() => props.onClickModule(props.module)}>
+              {props.module.id === (props.currentModule ? props.currentModule.id : '') ? 'Hide' : 'Show'}
+            </p>
+            <img className="module-folder__tree" src={require('./assets/tree.png')}
+                onClick={() => props.onClickTree(props.module.id)}/>
+
+            <p className="module-folder__count">{props.questionsByModule[props.module.id].length} </p>
+          </div>
         </div>
 
         {props.isSaveQuestionInProgress ? isSaveQuestionInProgressIndicator : null}

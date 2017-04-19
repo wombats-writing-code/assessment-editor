@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import Spinner from 'react-spinkit'
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 import ModuleFolder from '../../components/ModuleFolder'
 import EditQuestion from '../../components/EditQuestion'
 import LinkOutcome from '../../components/LinkOutcome'
+import VisualizeTree from '../../components/VisualizeTree'
 
 import xoces from 'xoces'
 
@@ -18,14 +20,14 @@ class Home extends Component {
       console.log('getting domains')
       this.props.getDomains(this.props.user);
     }
-    // console.log('xoces', xoces)
+    console.log('xoces', xoces)
   }
 
   render() {
     let props = this.props;
 
-    let spinner = props.isGetQuestionsInProgress ?
-                  (<div className="spinner-wrapper"><Spinner spinnerName="three-bounce" /></div>) : null;
+    let isGetQuestionsInProgressIndicator = props.isGetQuestionsInProgress ?
+                  (<div className="spinner-wrapper"><p className="fade-in-out muted">Loading questions...</p></div>) : null;
 
     if (!this.props.domains) {
       return null;
@@ -34,14 +36,16 @@ class Home extends Component {
 
     let moduleBody;
     if (props.mapping && props.mapping.modules && !props.isGetQuestionsInProgress) {
-      moduleBody = (<div className="large-10 large-centered columns">
-        {_.map(props.mapping.modules, module => {
-          return (
-            <ModuleFolder key={module.id} module={module} />
-          )
-        })}
-
-        <ModuleFolder key={'Uncategorized'} module={{id: 'Uncategorized', displayName: 'Uncategorized'}} />
+      moduleBody = (
+        <div className="large-10 large-centered columns">
+          <ModuleFolder key={'Uncategorized'}
+                        module={{id: 'Uncategorized', displayName: 'Uncategorized'}}
+                        className="module-folder--uncategorized" />
+          {_.map(props.mapping.modules, module => {
+            return (
+              <ModuleFolder key={module.id} module={module} />
+            )
+          })}
       </div>)
     }
 
@@ -51,28 +55,41 @@ class Home extends Component {
     }
 
     return (
-      <div className="row">
-        <div className="button-bar">
-          {_.map(props.domains, domain => {
-            let selectedStyle = props.currentDomain && props.currentDomain.id === domain.id ? 'is-selected' : null;
-            return (
-              <button key={domain.displayName}
-                      className={`button domain-button ${selectedStyle}`}
-                      onClick={() => props.onClickDomain(['outcome', 'module'], ['HAS_PARENT_OF', 'HAS_PREREQUISITE_OF'], domain, props.user)}>
-                {domain.displayName}
-              </button>
-            )
-          })}
+    <div>
+      <div className="row margin-bottom margin-top">
+        <div className="medium-5 columns select-domain">
+          <div className="flex-container align-top">
+            <label className="bold select-domain-label">Select course</label>
+            <Select className="select-domain-dropdown"
+              name="select-domain-name"
+              value={props.currentDomain}
+              labelKey="displayName"
+              options={props.domains}
+              clearable={false}
+              onChange={(domain) => props.onClickDomain(['outcome', 'module'], ['HAS_PARENT_OF', 'HAS_PREREQUISITE_OF'], domain, props.user)}
+            />
+          </div>
         </div>
+        <div className="medium-7 columns">
+          <button className="button create-new-question-button"
+                  onClick={() => props.onClickNewQuestion(props.currentDomain)}>
+            + New question
+          </button>
+        </div>
+      </div>
 
-        {spinner}
+      <div className="row">
+        {isGetQuestionsInProgressIndicator}
 
         {moduleBody}
 
         {editQuestion}
-        <LinkOutcome />
-
       </div>
+
+      <LinkOutcome />
+      <VisualizeTree />
+
+    </div>
     )
   }
 }

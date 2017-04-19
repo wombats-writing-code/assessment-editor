@@ -34,7 +34,8 @@ export default (initialState = {}) => {
 
         let subset = {
           assessment: _.omit(state.assessment,
-            ['isGetQuestionsInProgress', 'isEditInProgress', 'isLinkOutcomeInProgress', 'isSaveQuestionInProgress']
+            ['isGetQuestionsInProgress', 'isEditInProgress', 'isLinkOutcomeInProgress',
+            'isSaveQuestionInProgress', 'isDeleteQuestionInProgress']
           ),
           mapping: state.mapping,
           login: state.login,

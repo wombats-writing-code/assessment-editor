@@ -1,6 +1,9 @@
 
 
-export const keywordSearch = (haystack, needle) => {
+export const keywordSearch = (object, needle) => {
+  // console.log('haystack', haystack, 'needle', needle)
+  let haystack = object.displayName;
+
   let parts = needle.split(' ');
   let partQ = '';
   for (let i=0; i<parts.length; i++) {

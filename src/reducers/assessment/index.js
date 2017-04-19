@@ -2,16 +2,24 @@ import _ from 'lodash'
 
 import {GET_DOMAINS_OPTIMISTIC, GET_DOMAINS_SUCCESS} from './getDomains'
 import {GET_QUESTIONS_OPTIMISTIC, GET_QUESTIONS_SUCCESS} from './getQuestions'
+import {SELECT_MODULE} from './selectModule'
+import {SELECT_QUESTION} from './selectQuestion'
 import {SELECT_DOMAIN} from './selectDomain'
+import {VISUALIZE_ENTITY, CLOSE_VISUALIZE_ENTITY} from './visualizeEntity'
+
 import {EDIT_QUESTION} from './editQuestion'
 import {CLOSE_EDIT_QUESTION} from './closeEditQuestion'
 import {LINK_OUTCOME} from './linkOutcome'
 import {CLOSE_LINK_OUTCOME} from './closeLinkOutcome'
 import {SELECT_LINK_OUTCOME} from './selectLinkOutcome'
+import {DELETE_CHOICE} from './deleteChoice'
+import {ADD_CHOICE} from './addChoice'
+import {CHANGE_QUESTION_FIELD} from './changeQuestionField'
 
 import {UPDATE_LINK_OUTCOME_OPTIMISTIC, UPDATE_LINK_OUTCOME_SUCCESS} from './updateLinkOutcome'
 import {UPDATE_QUESTION_OPTIMISTIC, UPDATE_QUESTION_SUCCESS} from './updateQuestion'
-import {CREATE_QUESTION_OPTIMISTIC, CREATE_QUESTION_SUCCESS} from './createQuestion'
+import {NEW_QUESTION, CREATE_QUESTION_OPTIMISTIC, CREATE_QUESTION_SUCCESS} from './createQuestion'
+import {DELETE_QUESTION_OPTIMISTIC, DELETE_QUESTION_SUCCESS} from './deleteQuestion'
 
 // ------------------------------------
 // Reducer
@@ -38,6 +46,18 @@ export default function assessmentReducer (state = initialState, action) {
         questions: null
       })
 
+    case SELECT_MODULE:
+      // console.log(action.module)
+      return _.assign({}, state, {
+        currentModule: state.currentModule && state.currentModule.id === action.module.id ? null : action.module // unselect it if it's already the current module
+      })
+
+    case SELECT_QUESTION:
+      // console.log(action.module)
+      return _.assign({}, state, {
+        currentQuestion: state.currentQuestion === action.question ? null : action.question // unselect it if it's already the current question
+      })
+
     case GET_QUESTIONS_OPTIMISTIC:
       return _.assign({}, state, {
         isGetQuestionsInProgress: true
@@ -49,16 +69,48 @@ export default function assessmentReducer (state = initialState, action) {
         questions: action.questions
       })
 
+    case NEW_QUESTION:
+      return _.assign({}, state, {
+        isEditInProgress: true,
+        editQuestionCopy: _stampNewQuestion(action.domain),
+        editType: 'new',
+      })
+
     case EDIT_QUESTION:
       return _.assign({}, state, {
         isEditInProgress: true,
-        editQuestionCopy: _.cloneDeep(action.question)
+        editQuestionCopy: _.cloneDeep(action.question),
+        editType: 'edit'
+      })
+
+    case CHANGE_QUESTION_FIELD:
+      // console.log('CHANGE_QUESTION_FIELD', action.data)
+      return _.assign({}, state, {
+        editQuestionCopy: _.assign({}, state.editQuestionCopy, action.data)
+      })
+
+    case DELETE_CHOICE:
+      // remove the choice at index idx
+      state.editQuestionCopy.choices.splice(action.idx, 1);
+
+      return _.assign({}, state, {
+        editQuestionCopy: _.assign({}, state.editQuestionCopy, {
+          choices: _.slice(state.editQuestionCopy.choices)
+        })
+      })
+
+    case ADD_CHOICE:
+      return _.assign({}, state, {
+        editQuestionCopy: _.assign({}, state.editQuestionCopy, {
+          choices: _.concat(state.editQuestionCopy.choices, _stampNewChoice())
+        })
       })
 
     case CLOSE_EDIT_QUESTION:
       return _.assign({}, state, {
         isEditInProgress: false,
-        editQuestionCopy: null
+        editQuestionCopy: null,
+        editType: null
       })
 
     case UPDATE_QUESTION_OPTIMISTIC:
@@ -146,6 +198,7 @@ export default function assessmentReducer (state = initialState, action) {
 
     case CREATE_QUESTION_OPTIMISTIC:
       return _.assign({}, state, {
+        currentModule: _stampUncategorizedModule(),
         isSaveQuestionInProgress: true,
         editQuestionCopy: null
       })
@@ -156,7 +209,61 @@ export default function assessmentReducer (state = initialState, action) {
         questions: _.concat(action.question, state.questions)
       })
 
+    case DELETE_QUESTION_OPTIMISTIC:
+      return _.assign({}, state, {
+        isDeleteQuestionInProgress: true
+      })
+
+    case DELETE_QUESTION_SUCCESS:
+      return _.assign({}, state, {
+        isDeleteQuestionInProgress: false,
+        questions: _.reject(state.questions, {id: action.question.id})
+      })
+
+    case VISUALIZE_ENTITY:
+      return _.assign({}, state, {
+        isVisualizeInProgress: true
+
+      })
+
+    case CLOSE_VISUALIZE_ENTITY:
+      return _.assign({}, state, {
+        isVisualizeInProgress: false
+      })
+
     default:
       return state
+  }
+}
+
+function _stampUncategorizedModule() {
+  return {
+    id: 'Uncategorized',
+    displayName: 'Uncategorized'
+  }
+}
+
+function _stampNewChoice(choiceId) {
+  return {
+    text: '',
+    confusedOutcomes: [],
+    feedback: '',
+    choiceId
+  }
+}
+
+function _stampNewQuestion(domain) {
+  let choices = _.map(_.range(4), idx => _stampNewChoice());
+
+  return {
+    // itemId: String,
+    displayName: `dev question ${_.uniqueId()}`,
+    description: '',
+    solution: choices[0],
+    feedback: '',
+    text: 'stamp new question',								// the actual text of the question
+    outcome: '',
+    choices,
+    domain: domain.id,
   }
 }

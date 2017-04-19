@@ -19,29 +19,24 @@ export const outcomesById = createSelector([
   }, {});
 });
 
-// export const questionsByModule = (mapping, questions) => {
-//
-//   if (!mapping || !mapping.modules) return null;
-//
-//
-//   let dict = _.reduce(mapping.modules, (result, module) => {
-//     let moduleOutcomes = _.map(_.filter(mapping.outcomes, outcome => {
-//       let hasParent = _.find(mapping.relationships, {sourceId: outcome.id, targetId: module.id});
-//       return hasParent;
-//     }), 'id');
-//
-//     // console.log('moduleOutcomes', module.displayName, moduleOutcomes.length);
-//
-//     result[module.id] = _.sortBy(_.filter(questions, q => {
-//       return moduleOutcomes.indexOf(q.outcome) > -1;
-//     }), q => q.displayName.startsWith('Target'));;
-//
-//     return result;
-//
-//   }, {});
-//
-//   return dict;
-// }
+
+export const modulesByOutcome = createSelector([
+  state => state.mapping,
+],
+  mapping => {
+    if (!mapping) return;
+
+    return _.reduce(mapping.outcomes, (result, outcome) => {
+      let hasParent = _.find(mapping.relationships, {sourceId: outcome.id, type: 'HAS_PARENT_OF'});
+      if (!hasParent) return;
+
+      let module = _.find(mapping.modules, {id: hasParent.targetId})
+      result[outcome.id] = module;
+
+      return result;
+    }, {})
+  }
+)
 
 export const questionsByModule = createSelector([
   state => state.mapping,
@@ -64,7 +59,7 @@ export const questionsByModule = createSelector([
       return moduleOutcomes.indexOf(q.outcome) > -1;
     }), q => q.displayName.startsWith('Target'));
 
-    result['Uncategorized'] = _.filter(questions, {outcome: null})
+    result['Uncategorized'] = _.filter(questions, q => !q.outcome)
 
     // console.log('result', result)
 

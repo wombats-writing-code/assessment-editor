@@ -41,7 +41,7 @@
   font-weight: 600;
 }
 
-.delete-choice-button:hover {
+.delete-choice-button:hover, .delete-choice-button:focus {
   background: transparent;
   color: $app-red;
   text-decoration: underline;

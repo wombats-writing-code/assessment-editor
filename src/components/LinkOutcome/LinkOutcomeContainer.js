@@ -4,6 +4,7 @@ import LinkOutcome from './LinkOutcome'
 import {closeLinkOutcome} from '../../reducers/assessment/closeLinkOutcome'
 import {selectLinkOutcome} from '../../reducers/assessment/selectLinkOutcome'
 import {updateLinkOutcome} from '../../reducers/assessment/updateLinkOutcome'
+import {modulesByOutcome} from '../../selectors'
 
 const mapStateToProps = (state, ownProps) => {
   // console.log('state in LinkOutcomeContainer', state)
@@ -14,7 +15,8 @@ const mapStateToProps = (state, ownProps) => {
     currentChoice: state.assessment.currentChoice,
     outcomes: state.mapping.outcomes,
     isOpen: state.assessment.isLinkOutcomeInProgress,
-    isUpdateQuestionInProgress: state.assessment.isUpdateQuestionInProgress
+    isUpdateQuestionInProgress: state.assessment.isUpdateQuestionInProgress,
+    modulesByOutcome: modulesByOutcome(state)
     // question: state.assessment.LinkOutcomeCopy
   }
 }

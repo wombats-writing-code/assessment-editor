@@ -31,7 +31,8 @@ export function updateQuestion(question) {
       data: {question}
     })
     .then( res => {
-      // console.log('res.data', res.data)
+      console.log('updateQuestion res.data', res.data)
+      
       dispatch(updateQuestionSuccess(res.data))
       return res.data;
     })
