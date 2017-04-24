@@ -11,8 +11,6 @@ import {visualizeEntity} from '../../reducers/assessment/visualizeEntity'
 import {linkOutcome} from '../../reducers/assessment/linkOutcome'
 
 const mapStateToProps = (state, ownProps) => {
-  // console.log('state in QuestionContainer', state)
-
   return {
     currentQuestion: state.assessment.currentQuestion,
     outcomesById: outcomesById(state),

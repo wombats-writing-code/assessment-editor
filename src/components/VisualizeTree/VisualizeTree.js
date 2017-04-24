@@ -6,9 +6,48 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import {keywordSearch} from '../LinkOutcome/keywordSearch'
 import './VisualizeTree.scss'
+import xoces from 'xoces'
 
 
 class VisualizeTree extends Component {
+
+  constructor(props) {
+    super(props);
+    this.widget = null;
+  }
+
+  componentDidMount() {
+    console.log('xoces', xoces)
+
+    this._updateXoces(this.props, this.widget);
+  }
+
+  componentDidUpdate(prevProps) {
+    // console.log('componentDidUpdate')
+
+    $('#xoces-container').empty();
+    this._updateXoces(this.props, this.widget);
+  }
+
+  _updateXoces(props, widget) {
+    let config = {
+      data: {
+        entities: props.visualizedEntities,                  // required!
+        relationships: props.relationships
+      },
+      entityLabelKey: 'displayName',                    // required!
+      relationship: {
+        sourceRef: 'sourceId',                       // required!
+        targetRef: 'targetId',                       // required!
+      },
+      width: '100%',
+      height: 500,
+      colorScheme: 'light',                  // 'light' or 'dark'
+    };
+
+    widget = xoces.widgets.TreeWidget.new(config);
+    widget.render({container: 'xoces-container'})
+  }
 
   render() {
     let props = this.props;
@@ -19,17 +58,28 @@ class VisualizeTree extends Component {
       <div className="large-8 columns large-centered">
         <Modal isOpen={props.isOpen} contentLabel="link-outcome-modal">
           <div className="flex-container space-between">
-            <p className="bold">Visualize</p>
+            <p className="">
+              <span className="light">Visualize</span>&nbsp;
+              <i>{props.currentEntity.displayName}</i>
+            </p>
             <button className="button close" onClick={() => props.onClickClose()}>X</button>
           </div>
-          <Select className="select-entity-dropdown"
-            name="form-field-name"
-            value={props.currentOutcome}
-            labelKey="displayName"
-            filterOption={keywordSearch}
-            options={props.outcomes}
-            onChange={(outcome) => props.onSelectOutcome(outcome, props.currentQuestion, props.currentChoice)}
-          />
+
+          <div className="flex-container space-between">
+            <p className="select-entity-prompt">Or select another thing to visualize</p>
+            <Select className="select-entity-dropdown"
+              name="form-field-name"
+              value={props.currentEntity}
+              labelKey="displayName"
+              filterOption={keywordSearch}
+              options={props.entities}
+              onChange={(entity) => props.onSelectVisualizeEntity(entity)}
+            />
+          </div>
+
+          <hr className="bottom-margin" />
+
+          <div id="xoces-container"></div>
 
         </Modal>
       </div>

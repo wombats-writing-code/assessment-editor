@@ -136,6 +136,7 @@ export default function assessmentReducer (state = initialState, action) {
       return _.assign({}, state, {
         isLinkOutcomeInProgress: true,
         editQuestionCopy: _.cloneDeep(action.question),
+        currentQuestion: action.question,
         currentChoice: action.choice
       })
 
@@ -193,6 +194,7 @@ export default function assessmentReducer (state = initialState, action) {
         }),
         isLinkOutcomeInProgress: false,
         editQuestionCopy: null,
+        currentQuestion: action.question,
         currentChoice: null
       })
 
@@ -222,8 +224,8 @@ export default function assessmentReducer (state = initialState, action) {
 
     case VISUALIZE_ENTITY:
       return _.assign({}, state, {
-        isVisualizeInProgress: true
-
+        isVisualizeInProgress: true,
+        currentEntityId: action.entityId
       })
 
     case CLOSE_VISUALIZE_ENTITY:

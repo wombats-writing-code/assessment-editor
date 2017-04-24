@@ -8,7 +8,6 @@ import EditQuestion from '../../components/EditQuestion'
 import LinkOutcome from '../../components/LinkOutcome'
 import VisualizeTree from '../../components/VisualizeTree'
 
-import xoces from 'xoces'
 
 import './Home.scss'
 
@@ -20,7 +19,6 @@ class Home extends Component {
       console.log('getting domains')
       this.props.getDomains(this.props.user);
     }
-    console.log('xoces', xoces)
   }
 
   render() {

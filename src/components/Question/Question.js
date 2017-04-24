@@ -43,9 +43,11 @@ class Question extends Component {
 
     if (!props.question) return null;
 
+
+
     let questionButtons, questionText, questionChoices, outcomeBody, visualizeOutcomeButton;
     if (props.currentQuestion === props.question) {
-      // console.log('question', props.question);
+      // console.log('currentQuestion', props.currentQuestion);
 
       questionButtons = (
         <QuestionToolbar question={props.question}
@@ -107,7 +109,7 @@ class Question extends Component {
       visualizeOutcomeButton = (
         <button className="button see-prereqs-button" onClick={() => props.onClickVisualizeOutcome(outcomeId)}>
           <img className="see-prereqs-button__image" src={require('./assets/tree--light.png')} />
-          See prerequisite tree!
+          See all prerequisites for outcome
         </button>
       )
     }
