@@ -104,6 +104,7 @@ export default function assessmentReducer (state = initialState, action) {
 
     case EDIT_QUESTION:
       return _.assign({}, state, {
+        currentQuestion: action.question,
         isEditInProgress: true,
         editQuestionCopy: _.cloneDeep(action.question),
         editType: 'edit'
@@ -154,6 +155,7 @@ export default function assessmentReducer (state = initialState, action) {
 
           return q;
         }),
+        currentQuestion: action.question,
         isEditInProgress: false,
         editQuestionCopy: null
       })

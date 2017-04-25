@@ -45,7 +45,7 @@ class Question extends Component {
 
 
 
-    let questionButtons, questionText, questionChoices, outcomeBody, visualizeOutcomeButton;
+    let questionBody, questionButtons, questionText, questionChoices, questionSolutionExplanation, outcomeBody, visualizeOutcomeButton;
     if (props.currentQuestion === props.question) {
       // console.log('currentQuestion', props.currentQuestion);
 
@@ -64,6 +64,24 @@ class Question extends Component {
           {_.map(props.question.choices, (choice, idx) => {
             return this._renderChoice(choice, idx);
           })}
+        </div>
+      )
+
+      questionSolutionExplanation = (
+        <div className="question-solution text-left">
+          <p className="bold">Solution</p>
+          <div className="question-content" dangerouslySetInnerHTML={{__html: props.question.feedback}}></div>
+        </div>
+      )
+
+
+      questionBody = (
+        <div className="medium-8 columns">
+          <div className="question-wrapper">
+            {questionText}
+            {questionSolutionExplanation}
+            {questionChoices}
+          </div>
         </div>
       )
 
@@ -128,21 +146,12 @@ class Question extends Component {
       )
     }
 
-    let questionSolutionExplanation;
-    if (this.state.isSolutionExpanded) {
-      questionSolutionExplanation = (
-        <div className="columns">
-          <div className="question-solution text-left">
-            <p className="bold">Solution</p>
-            <div className="question-content" dangerouslySetInnerHTML={{__html: props.question.feedback}}></div>
-          </div>
-        </div>
-      )
+    let visibleStyle = {
+      marginBottom: '.75rem'
     }
 
-
     return (
-      <div className="question">
+      <div className="question" style={props.currentQuestion === props.question ? visibleStyle : null}>
         <div className="question__bar flex-container space-between">
           <p className="question__title">{props.question.displayName}</p>
 
@@ -156,22 +165,11 @@ class Question extends Component {
 
         {questionButtons}
 
-        {/* <div className="row">
-          <div className="medium-7 columns">
-        </div> */}
-
         <div className="row">
-          <div className="columns">
 
-          </div>
-          {questionSolutionExplanation}
+          {questionBody}
 
-          <div className="medium-6 columns">
-            {questionText}
-            {questionChoices}
-          </div>
-
-          <div className="medium-6 columns text-left outcomes">
+          <div className="medium-4 columns text-left outcomes">
             {visualizeOutcomeButton}
             {outcomeBody}
           </div>

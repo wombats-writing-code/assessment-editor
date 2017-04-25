@@ -6,7 +6,7 @@ export const Header = () => (
   <div className="header">
     <div className="flex-container align-center space-between">
       <p>Assessment Editor</p>
-      <div>
+      {/* <div>
         <IndexLink to='/' activeClassName='route--active'>
           Home
         </IndexLink>
@@ -14,7 +14,7 @@ export const Header = () => (
         <Link to='/counter' activeClassName='route--active'>
           Counter
         </Link>
-      </div>
+      </div> */}
 
     </div>
   </div>

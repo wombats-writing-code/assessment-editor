@@ -55,30 +55,29 @@ class EditQuestion extends Component {
     // console.log('componentDidUpdate', this.questionTextContainer);
     if (!this.props.question) return false;
 
-    // upodating is done in the reducers
-
     if (!prevProps.question ||
         prevProps.question.text !== this.props.question.text ||
         prevProps.question.feedback !== this.props.question.feedback ||
         prevProps.question.choices !== this.props.question.choices) {
 
-      setTimeout( () => {
-        this.choiceContainers = $('.choice-container');
-        // console.log('this.choices', this.props.question.choices)
-        // console.log('this.choiceContainers in componentDidUpdate', this.choiceContainers);
+        setTimeout( () => {
+          this.choiceContainers = $('.choice-container');
+          // console.log('this.choices', this.props.question.choices)
+          // console.log('this.choiceContainers in componentDidUpdate', this.choiceContainers);
 
-        let choiceContainerIds = _.map(this.choiceContainerIds, 'id');
+          let choiceContainerIds = _.map(this.choiceContainerIds, 'id');
 
-        // go through all the instances of CK editor. If an editor exists but choice doesn't, remove it
-        _.forEach(CK.instances, editor => {
-          // console.log('editor', editor);
-          if (choiceContainerIds.indexOf(editor.id) === -1) {
-            editor.destroy(true)
-          }
-        })
+          // go through all the instances of CK editor.
+          // If an editor exists but choice doesn't, remove it
+          _.forEach(CK.instances, editor => {
+            // console.log('editor', editor);
+            if (choiceContainerIds.indexOf(editor.id) === -1) {
+              editor.destroy(true)
+            }
+          })
 
-        this._initCKEditor();
-      }, 100)
+          this._initCKEditor();
+        }, 100)
     }
   }
 
@@ -105,8 +104,8 @@ class EditQuestion extends Component {
         extraPlugins: 'mathjax,uploadimage'
       });
       instance.config.height = '15em'
-
       instance.setData(this.props.question.feedback);
+      instance.on('change', () => this._onEditorChange(instance));
 
       console.log('solutionExplanationContainer')
     }
@@ -121,7 +120,9 @@ class EditQuestion extends Component {
           extraPlugins: 'mathjax,uploadimage'
         });
 
+        // set the editor with the text of the question choice
         instance.setData(this.props.question.choices[idx].text)
+        instance.on('change', () => this._onEditorChange(instance));
       }
     })
   }
@@ -236,20 +237,29 @@ class EditQuestion extends Component {
     )
   }
 
+  // this is a really horrible hack here where we bypass the reducers to mutate the question
+  // we do this because we need a way to update the underlying model when the input changes,
+  // WITHOUT triggering a ckeditor update
   _onEditorChange(editor) {
-    console.log('editor', editor);
     let content = editor.getData();
-    console.log('content', content)
 
     let elName = editor.name;
-    switch(elName) {
-      case 'questionTextContainer':
-        this.props.onChangeQuestionField({
-          text: content
-        })
+    if (elName === 'questionTextContainer') {
+      this.props.question.text = content
+
+    } else if (elName === 'solutionExplanationContainer') {
+      this.props.question.feedback = content
+
+    } else if (elName.indexOf('choiceContainer') > -1) {
+      // console.log('editor', editor);
+      let elId = editor.element.$.id;
+      let idx = elId.split('-')[1]
+      // console.log('editor element id', elId, idx)
+      this.props.question.choices[idx].text = content;
+      // console.log('content', content)
+
 
     }
-    // update props.questionCopy with text content from the given editor
   }
 
   _onClickSubmit(e) {
