@@ -9,12 +9,14 @@ import {editQuestion} from '../../reducers/assessment/editQuestion'
 import {deleteQuestion} from '../../reducers/assessment/deleteQuestion'
 import {visualizeEntity} from '../../reducers/assessment/visualizeEntity'
 import {linkOutcome} from '../../reducers/assessment/linkOutcome'
+import {questionCountSelector} from '../../selectors'
 
 const mapStateToProps = (state, ownProps) => {
   return {
     currentQuestion: state.assessment.currentQuestion,
     outcomesById: outcomesById(state),
-    isDeleteQuestionInProgress: state.assessment.isDeleteQuestionInProgress
+    isDeleteQuestionInProgress: state.assessment.isDeleteQuestionInProgress,
+    questionCountForOutcome: questionCountSelector(state)
   }
 }
 

@@ -70,7 +70,7 @@ class Question extends Component {
       let outcomeId = props.question.outcome;
 
       outcomeBody = (
-        <div className="">
+        <div className="outcome-body">
           <p className="">
             <img className="button outcome-link-button" src={require('./assets/unlink.png')}
                   onClick={() => props.onClickLinkOutcome(props.outcomesById[outcomeId], props.question, null)}
@@ -82,13 +82,25 @@ class Question extends Component {
           {_.map(props.question.choices, (choice, idx) => {
             let confusedOutcomeId = choice.confusedOutcomes[0];
 
-            let linkButton;
+            let linkButton, questionCount;
             if (idx > 0) {
               linkButton = (
                 <img className="button outcome-link-button" src={require('./assets/unlink.png')}
                       onClick={() => props.onClickLinkOutcome(props.outcomesById[confusedOutcomeId], props.question, choice)}
                 />
               )
+
+              if (confusedOutcomeId) {
+                let warningStyle = {
+                  color: 'red',
+                  fontWeight: '600'
+                }
+                questionCount = (
+                  <p className="mute choice-outcome__question-count" style={props.questionCountForOutcome[confusedOutcomeId] == 0 ? warningStyle : null}>
+                    ({props.questionCountForOutcome[confusedOutcomeId]} items)
+                  </p>
+                )
+              }
             }
 
             return (
@@ -97,9 +109,10 @@ class Question extends Component {
                 <span className="alphabet-label mute">
                   {Alphabet[idx]}&#x00029;
                 </span>
-                <p className="small">
+                <p className="choice-outcome__text">
                   {confusedOutcomeId ? props.outcomesById[confusedOutcomeId].displayName : '--'}
                 </p>
+                {questionCount}
               </div>
             )
           })}
@@ -107,7 +120,8 @@ class Question extends Component {
       )
 
       visualizeOutcomeButton = (
-        <button className="button see-prereqs-button" onClick={() => props.onClickVisualizeOutcome(outcomeId)}>
+        <button className="button see-prereqs-button" disabled={!outcomeId}
+                onClick={() => props.onClickVisualizeOutcome(outcomeId)}>
           <img className="see-prereqs-button__image" src={require('./assets/tree--light.png')} />
           See all prerequisites for outcome
         </button>
@@ -152,12 +166,12 @@ class Question extends Component {
           </div>
           {questionSolutionExplanation}
 
-          <div className="medium-7 columns">
+          <div className="medium-6 columns">
             {questionText}
             {questionChoices}
           </div>
 
-          <div className="medium-5 columns text-left outcomes">
+          <div className="medium-6 columns text-left outcomes">
             {visualizeOutcomeButton}
             {outcomeBody}
           </div>

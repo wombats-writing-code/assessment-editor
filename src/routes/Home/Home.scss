@@ -24,3 +24,31 @@
   margin-right: 0;
   margin-left: auto;
 }
+
+.search-input {
+  box-shadow: none;
+  padding: 1.5rem 1em;
+  margin-bottom: 1.5rem;
+  border: 1px solid #bbb;
+}
+
+.search-input:focus {
+  box-shadow: none;
+  border-color: $app-blue;
+}
+
+.search-input::-webkit-input-placeholder {
+  color: #888;
+}
+
+.search-input:-moz-placeholder {
+  color: #888;
+}
+
+.search-input::-ms-input-placeholder {
+  color: #888;
+}
+
+.search-input::-moz-input-placeholder {
+  color: #888;
+}

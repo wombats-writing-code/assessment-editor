@@ -3,6 +3,7 @@ import _ from 'lodash'
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
+import Question from '../../components/Question'
 import ModuleFolder from '../../components/ModuleFolder'
 import EditQuestion from '../../components/EditQuestion'
 import LinkOutcome from '../../components/LinkOutcome'
@@ -31,11 +32,22 @@ class Home extends Component {
       return null;
     }
 
+    let search;
+    if (!props.isGetQuestionsInProgress) {
+      search = (
+        <div className="large-11 large-centered columns">
+          <input className="input search-input" type="search"
+                  placeholder="Search by question keywords, e.g. 'graph log'"
+                  value={props.searchQuery}
+                  onChange={(e) => props.onChangeSearchQuery(e.target.value, props.questionsByModule, props.questions)}/>
+        </div>
+      )
+    }
 
     let moduleBody;
-    if (props.mapping && props.mapping.modules && !props.isGetQuestionsInProgress) {
+    if (!props.searchQuery && props.mapping && props.mapping.modules && !props.isGetQuestionsInProgress) {
       moduleBody = (
-        <div className="large-10 large-centered columns">
+        <div className="large-11 large-centered columns">
           <ModuleFolder key={'Uncategorized'}
                         module={{id: 'Uncategorized', displayName: 'Uncategorized'}}
                         className="module-folder--uncategorized" />
@@ -45,6 +57,19 @@ class Home extends Component {
             )
           })}
       </div>)
+    }
+
+    let questionBody;
+    if (props.searchQuery) {
+      questionBody = (
+        <div className="large-11 large-centered columns">
+          {_.map(props.matchedQuestions, (q, idx) => {
+            return (
+              <Question key={`matched-question-${idx}`} question={q} />
+            )
+          })}
+        </div>
+      )
     }
 
     let editQuestion;
@@ -78,8 +103,9 @@ class Home extends Component {
 
       <div className="row">
         {isGetQuestionsInProgressIndicator}
-
+        {search}
         {moduleBody}
+        {questionBody}
 
         {editQuestion}
       </div>

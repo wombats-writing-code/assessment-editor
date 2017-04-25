@@ -52,6 +52,10 @@
   margin-right: 1em;
 }
 
+.outcome-body {
+  font-size: .875rem;
+}
+
 .outcome-link-button, .outcome-link-button:focus {
   margin-right: 1em;
   padding: .5em;
@@ -65,10 +69,6 @@
   background: #f0f0f0;
 }
 
-.question-choices, .outcomes {
-  // margin-bottom: 3rem;
-}
-
 .see-prereqs-button {
   font-size: .875rem;
   padding: .35rem .75em .35rem .5em;
@@ -80,4 +80,12 @@
   width: 1rem;
   height: 1rem;
   margin-right: .5em;
+}
+
+.choice-outcome__text {
+  margin-right: 1em;
+}
+
+.choice-outcome__question-count {
+  min-width: 20%;
 }

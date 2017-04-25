@@ -1,7 +1,11 @@
 import _ from 'lodash'
 
+import {search} from '../../selectors/search'
+
 import {GET_DOMAINS_OPTIMISTIC, GET_DOMAINS_SUCCESS} from './getDomains'
 import {GET_QUESTIONS_OPTIMISTIC, GET_QUESTIONS_SUCCESS} from './getQuestions'
+import {CHANGE_SEARCH_QUERY} from './changeSearchQuery'
+
 import {SELECT_MODULE} from './selectModule'
 import {SELECT_QUESTION} from './selectQuestion'
 import {SELECT_DOMAIN} from './selectDomain'
@@ -25,7 +29,8 @@ import {DELETE_QUESTION_OPTIMISTIC, DELETE_QUESTION_SUCCESS} from './deleteQuest
 // Reducer
 // ------------------------------------
 const initialState = {
-  domains: null
+  domains: null,
+  visibleModules: true,
 }
 export default function assessmentReducer (state = initialState, action) {
   switch (action.type) {
@@ -42,8 +47,29 @@ export default function assessmentReducer (state = initialState, action) {
 
     case SELECT_DOMAIN:
       return _.assign({}, state, {
+        searchQuery: '',
         currentDomain: action.domain,
         questions: null
+      })
+
+    case CHANGE_SEARCH_QUERY:
+      // let visibleModules =
+      let matchedQuestions = _.filter(action.questions, q => {
+        return search(action.query, q.displayName) || search(action.query, q.text);
+      })
+
+      // console.log('matchedQuestions', matchedQuestions);
+
+      // let matchedModules = _.compact(_.map(matchedQuestions, q => {
+      //   let module = _.find(action.questionsByModule, (questions) => questions.indexOf(q) > -1)
+      //   return module;
+      // }))
+      //
+      // console.log('matchedModules', matchedModules);
+
+      return _.assign({}, state, {
+        searchQuery: action.query,
+        matchedQuestions: matchedQuestions
       })
 
     case SELECT_MODULE:

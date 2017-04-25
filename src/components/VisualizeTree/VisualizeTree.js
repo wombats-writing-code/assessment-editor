@@ -26,33 +26,42 @@ class VisualizeTree extends Component {
     // console.log('componentDidUpdate')
 
     $('#xoces-container').empty();
+    // $('svg').empty()
     this._updateXoces(this.props, this.widget);
   }
 
   _updateXoces(props, widget) {
-    let config = {
-      data: {
-        entities: props.visualizedEntities,                  // required!
-        relationships: props.relationships
-      },
-      entityLabelKey: 'displayName',                    // required!
-      relationship: {
-        sourceRef: 'sourceId',                       // required!
-        targetRef: 'targetId',                       // required!
-      },
-      width: '100%',
-      height: 500,
-      colorScheme: 'light',                  // 'light' or 'dark'
-    };
+    if (props.visualizedEntities && props.visualizedEntities.length > 0) {
+      let config = {
+        data: {
+          entities: props.visualizedEntities,                  // required!
+          relationships: props.relationships
+        },
+        entityLabelKey: 'displayName',                    // required!
+        nodeLabelKey: 'questionCount',
+        nodeColor: (entity) => {
+          return props.questionCountForEntity[entity.id] === 0 ? '#FF6F69' : '#6A9870'
+        },
+        relationship: {
+          sourceRef: 'sourceId',                       // required!
+          targetRef: 'targetId',                       // required!
+        },
+        width: '100%',
+        height: 500,
+        colorScheme: 'light',                  // 'light' or 'dark'
+      };
 
-    widget = xoces.widgets.TreeWidget.new(config);
-    widget.render({container: 'xoces-container'})
+      widget = xoces.widgets.TreeWidget.new(config);
+      widget.render({container: 'xoces-container'})
+    }
   }
 
   render() {
     let props = this.props;
 
-    if (!props.isOpen) return null;
+    if (!props.isOpen || !props.visualizedEntities) return null;
+
+    console.log('props.currentEntity', props.currentEntity)
 
     return (
       <div className="large-8 columns large-centered">

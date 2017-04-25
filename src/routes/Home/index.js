@@ -7,9 +7,10 @@ import {getDomains} from '../../reducers/assessment/getDomains'
 import {getQuestions} from '../../reducers/assessment/getQuestions'
 import {selectDomain} from '../../reducers/assessment/selectDomain'
 import {newQuestion} from '../../reducers/assessment/createQuestion'
+import {changeSearchQuery} from '../../reducers/assessment/changeSearchQuery'
 import {getMapping} from '../../reducers/mapping/getMapping'
 
-import {selectUser, selectQuestions} from '../../selectors/'
+import {selectUser, selectQuestions, questionsByModule} from '../../selectors/'
 
 const mapStateToProps = (state, ownProps) => {
   // console.log('state in home container', state)
@@ -21,6 +22,9 @@ const mapStateToProps = (state, ownProps) => {
     currentModule: state.assessment.currentModule,
     mapping: state.mapping,
     questions: selectQuestions(state),
+    questionsByModule: questionsByModule(state),
+    searchQuery: state.assessment.searchQuery,
+    matchedQuestions: state.assessment.matchedQuestions,
     isGetQuestionsInProgress: state.assessment.isGetQuestionsInProgress,
     isEditInProgress: state.assessment.isEditInProgress
   }
@@ -42,7 +46,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     onClickNewQuestion: (domain) => dispatch(newQuestion(domain)),
     onSelectModule: module => {
 
-    }
+    },
+    onChangeSearchQuery: (query, questionsByModule, questions) => dispatch(changeSearchQuery(query, questionsByModule, questions))
   }
 }
 

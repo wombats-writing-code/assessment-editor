@@ -71,3 +71,14 @@ export const questionsByModule = createSelector([
 
   return dict;
 });
+
+export const questionCountSelector = createSelector([
+  state => state.mapping.outcomes,
+  state => state.assessment.questions
+], (outcomes, questions) => {
+  return _.reduce(outcomes, (result, outcome) => {
+    result[outcome.id] = _.filter(questions, {outcome: outcome.id}).length;
+
+    return result;
+  }, {})
+})
