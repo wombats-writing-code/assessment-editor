@@ -61,7 +61,7 @@ class VisualizeTree extends Component {
 
     if (!props.isOpen || !props.visualizedEntities) return null;
 
-    console.log('props.currentEntity', props.currentEntity)
+    // console.log('props.currentEntity', props.currentEntity)
 
     return (
       <div className="large-8 columns large-centered">

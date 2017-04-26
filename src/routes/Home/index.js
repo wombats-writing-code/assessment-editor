@@ -13,7 +13,7 @@ import {getMapping} from '../../reducers/mapping/getMapping'
 import {selectUser, selectQuestions, questionsByModule} from '../../selectors/'
 
 const mapStateToProps = (state, ownProps) => {
-  // console.log('state in home container', state)
+  // console.log('state in HomeContainer', state)
 
   return {
     user: selectUser(state),
@@ -26,7 +26,8 @@ const mapStateToProps = (state, ownProps) => {
     searchQuery: state.assessment.searchQuery,
     matchedQuestions: state.assessment.matchedQuestions,
     isGetQuestionsInProgress: state.assessment.isGetQuestionsInProgress,
-    isEditInProgress: state.assessment.isEditInProgress
+    isEditInProgress: state.assessment.isEditInProgress,
+    isVisualizeInProgress: state.assessment.isVisualizeInProgress
   }
 }
 

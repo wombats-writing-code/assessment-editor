@@ -34,6 +34,14 @@ class ModuleFolder extends Component {
       }
     }
 
+    let visualizeTreeButton;
+    if (props.module.displayName !== 'Uncategorized') {
+      visualizeTreeButton = (
+        <img className="module-folder__tree" src={require('./assets/tree.png')}
+            onClick={() => props.onClickTree(props.module.id)}/>
+      )
+    }
+
 
     return (
       <div className={props.className}>
@@ -45,9 +53,9 @@ class ModuleFolder extends Component {
               onClick={() => props.onClickModule(props.module)}>
               {props.module.id === (props.currentModule ? props.currentModule.id : '') ? 'Hide' : 'Show'}
             </p>
-            <img className="module-folder__tree" src={require('./assets/tree.png')}
-                onClick={() => props.onClickTree(props.module.id)}/>
 
+            {visualizeTreeButton}
+            
             <p className="module-folder__count">{props.questionsByModule[props.module.id].length} </p>
           </div>
         </div>

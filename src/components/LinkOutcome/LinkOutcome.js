@@ -28,7 +28,7 @@ class LinkOutcome extends Component {
           </div>
 
           <div className="row">
-            <div className="medium-9 columns">
+            <div className="medium-9 large-9 columns">
               <Select className="select-outcome-dropdown"
                 name="form-field-name"
                 value={props.currentOutcome}
@@ -44,13 +44,19 @@ class LinkOutcome extends Component {
           </div>
 
 
-          <div className="flex-container link-outcome-modal__controls">
-            <button className="button" onClick={(e) => {e.preventDefault(); props.onClickClose()}}>Cancel</button>
-            <button className="button form__save-button" disabled={props.isUpdateQuestionInProgress}
-                    onClick={(e) => props.onSaveLinkOutcome(props.currentQuestion)}>
-                    {props.isUpdateQuestionInProgress ? 'Working...' : 'Save'}
-            </button>
+          <div className="row">
+            <div className="medium-9 large-9 columns">
+              <div className="flex-container link-outcome-modal__controls">
+                <button className="button" onClick={(e) => {e.preventDefault(); props.onClickClose()}}>Cancel</button>
+                <button className="button form__save-button" disabled={props.isUpdateQuestionInProgress}
+                        onClick={(e) => props.onSaveLinkOutcome(props.currentQuestion)}>
+                        {props.isUpdateQuestionInProgress ? 'Working...' : 'Save'}
+                </button>
+              </div>
+            </div>
           </div>
+
+
         </Modal>
       </div>
 

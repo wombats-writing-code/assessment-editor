@@ -32,8 +32,8 @@ class Home extends Component {
       return null;
     }
 
-    let search;
-    if (!props.isGetQuestionsInProgress) {
+    let search, newQuestionButton;
+    if (props.currentDomain && !props.isGetQuestionsInProgress) {
       search = (
         <div className="large-11 large-centered columns">
           <input className="input search-input" type="search"
@@ -42,10 +42,17 @@ class Home extends Component {
                   onChange={(e) => props.onChangeSearchQuery(e.target.value, props.questionsByModule, props.questions)}/>
         </div>
       )
+
+      newQuestionButton = (
+        <button className="button create-new-question-button"
+                onClick={() => props.onClickNewQuestion(props.currentDomain)}>
+          + New question
+        </button>
+      )
     }
 
     let moduleBody;
-    if (!props.searchQuery && props.mapping && props.mapping.modules && !props.isGetQuestionsInProgress) {
+    if (props.currentDomain && props.mapping && !props.searchQuery && !props.isGetQuestionsInProgress) {
       moduleBody = (
         <div className="large-11 large-centered columns">
           <ModuleFolder key={'Uncategorized'}
@@ -77,6 +84,11 @@ class Home extends Component {
       editQuestion =   <EditQuestion />
     }
 
+    let visualizeTree
+    if (props.isVisualizeInProgress) {
+      visualizeTree = <VisualizeTree />
+    }
+
     return (
     <div>
       <div className="row margin-bottom margin-top">
@@ -94,10 +106,7 @@ class Home extends Component {
           </div>
         </div>
         <div className="medium-7 columns">
-          <button className="button create-new-question-button"
-                  onClick={() => props.onClickNewQuestion(props.currentDomain)}>
-            + New question
-          </button>
+          {newQuestionButton}
         </div>
       </div>
 
@@ -111,7 +120,7 @@ class Home extends Component {
       </div>
 
       <LinkOutcome />
-      <VisualizeTree />
+      {visualizeTree}
 
     </div>
     )
