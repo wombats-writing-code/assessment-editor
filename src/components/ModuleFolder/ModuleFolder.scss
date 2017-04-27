@@ -7,6 +7,10 @@
   margin-bottom: 1.5rem;
 }
 
+.module-folder__bar:hover, .module-folder__bar.is-active {
+  background: #fff;
+}
+
 .module-folder--uncategorized .module-folder__bar {
   background: rgba($app-red, .15);
 }

@@ -14,8 +14,8 @@ export const CREATE_QUESTION_SUCCESS = 'CREATE_QUESTION_SUCCESS'
 // Actions
 // ------------------------------------
 
-function createQuestionOptimistic() {
-  return {type: CREATE_QUESTION_OPTIMISTIC}
+function createQuestionOptimistic(question, module) {
+  return {type: CREATE_QUESTION_OPTIMISTIC, question, module}
 }
 
 function createQuestionSuccess(question) {
@@ -26,9 +26,9 @@ export function newQuestion(domain) {
   return {type: NEW_QUESTION, domain}
 }
 
-export function createQuestion(question) {
+export function createQuestion(question, module) {
   return function(dispatch) {
-    dispatch(createQuestionOptimistic())
+    dispatch(createQuestionOptimistic(question, module))
 
     return axios({
       url: `${getHost()}/api/questions/`,

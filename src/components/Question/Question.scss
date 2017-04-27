@@ -15,8 +15,8 @@
   // z-index: 1;
 }
 
-.question__bar.is-active {
-
+.question__bar:hover, .question__bar.is-active {
+  background: #fff;
 }
 
 .question__title {

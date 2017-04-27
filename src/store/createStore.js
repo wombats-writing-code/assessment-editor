@@ -37,7 +37,7 @@ export default (initialState = {}) => {
             assessment: _.omit(state.assessment,
               [
                 'isGetQuestionsInProgress', 'isEditInProgress', 'isLinkOutcomeInProgress', 'isVisualizeInProgress',
-                'isSaveQuestionInProgress', 'isDeleteQuestionInProgress',
+                'isUpdateQuestionInProgress', 'isSaveQuestionInProgress', 'isDeleteQuestionInProgress',
                 'currentQuestion', 'currentEntityId', 'searchQuery', 'matchedQuestions'
               ]
             ),

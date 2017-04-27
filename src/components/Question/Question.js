@@ -13,7 +13,8 @@ class Question extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSolutionExpanded: false
+      isSolutionExpanded: false,
+      isExpanded: false
     }
   }
 
@@ -43,15 +44,20 @@ class Question extends Component {
 
     if (!props.question) return null;
 
+    // console.log('state isExpanded?', this.state.isExpanded);
+    // console.log('currentQuestion?', props.currentQuestion === props.question)
 
+    let isExpanded = this.state.isExpanded || props.currentQuestion === props.question;
 
     let questionBody, questionButtons, questionText, questionChoices, questionSolutionExplanation, outcomeBody, visualizeOutcomeButton;
-    if (props.currentQuestion === props.question) {
+    if (isExpanded) {
       // console.log('currentQuestion', props.currentQuestion);
 
       questionButtons = (
         <QuestionToolbar question={props.question}
-                        onClickEdit={props.onClickEdit} onClickCopy={() => this._onClickCopy(props.question)} onConfirmDelete={props.onConfirmDelete}
+                        onClickEdit={props.onClickEdit}
+                        onClickCopy={() => this._onClickCopy(props.question)}
+                        onConfirmDelete={props.onConfirmDelete}
                         isDeleteQuestionInProgress={props.isDeleteQuestionInProgress}
        />)
 
@@ -150,17 +156,15 @@ class Question extends Component {
       marginBottom: '.75rem'
     }
 
+    let activeStyle = {
+      background: '#fff'
+    }
+
     return (
-      <div className="question" style={props.currentQuestion === props.question ? visibleStyle : null}>
-        <div className="question__bar flex-container space-between">
-          <p className="question__title">{props.question.displayName}</p>
-
-          <div>
-            <p className="module-folder__show-hide" onClick={() => props.onClickQuestion(props.question)}>
-              {props.question === props.currentQuestion ? 'Hide' : 'Show'}
-            </p>
-          </div>
-
+      <div className="question" style={isExpanded ? visibleStyle : null}>
+        <div className="question__bar flex-container space-between" style={isExpanded ? activeStyle : null}
+              onClick={() => this._onClickQuestion(props.question)}>
+          <p className="question__title"> {props.question.displayName} </p>
         </div>
 
         {questionButtons}
@@ -179,10 +183,29 @@ class Question extends Component {
     )
   }
 
+  _onClickQuestion(question) {
+
+    // console.log('will set state to', !this.state.isExpanded)
+
+    // if the current state is expanded, the next state should be hidden
+    if (this.state.isExpanded) {
+      this.props.onClickQuestion(null)
+
+    // if the current state is hidden, the next state should be expanded
+    } else {
+      this.props.onClickQuestion(question)
+    }
+
+    this.setState({
+      isExpanded: !this.state.isExpanded
+    })
+
+  }
+
   _onClickCopy(question) {
     this.props.onClickCopy(_.assign({}, question, {
       displayName: question.displayName + ` (Copy #${_.uniqueId()})`
-    }));
+    }), this.props.currentModule);
   }
 
 }

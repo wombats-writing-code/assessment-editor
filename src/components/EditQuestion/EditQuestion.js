@@ -160,6 +160,20 @@ class EditQuestion extends Component {
 
     if (!props.question) return null;
 
+    let addWrongChoiceButton;
+    if (props.editType === 'new') {
+      addWrongChoiceButton = (
+        <button className="button" disabled>Want to add a wrong answer? You need to save the question first and then open it to edit.</button>
+      )
+    } else {
+      addWrongChoiceButton = (
+        <button className="button add-choice-button"
+                onClick={(e) => {e.preventDefault(); props.onAddChoice(props.question.choices)}}>
+                Add a wrong answer
+        </button>
+      )
+    }
+
     return (
       <Modal isOpen={props.isOpen} contentLabel="edit-question-modal">
         <div className="flex-container space-between">
@@ -220,10 +234,7 @@ class EditQuestion extends Component {
             )
           })}
 
-          <button className="button add-choice-button"
-                  onClick={(e) => {e.preventDefault(); props.onAddChoice(props.question.choices)}}>
-                  Add a wrong answer
-          </button>
+          {addWrongChoiceButton}
 
           <div className="flex-container">
             <button className="button" onClick={(e) => {e.preventDefault(); props.onClickClose()}}>Cancel</button>

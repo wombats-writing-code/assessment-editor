@@ -79,7 +79,7 @@ export default function assessmentReducer (state = initialState, action) {
       })
 
     case SELECT_QUESTION:
-      // console.log(action.module)
+      // console.log('is already currentQuestion?', action.question === state.currentQuestion)
       return _.assign({}, state, {
         currentQuestion: state.currentQuestion === action.question ? null : action.question // unselect it if it's already the current question
       })
@@ -228,7 +228,7 @@ export default function assessmentReducer (state = initialState, action) {
 
     case CREATE_QUESTION_OPTIMISTIC:
       return _.assign({}, state, {
-        currentModule: _stampUncategorizedModule(),
+        currentModule: action.module ? action.module : _stampUncategorizedModule(),
         isSaveQuestionInProgress: true,
         editQuestionCopy: null
       })
@@ -287,11 +287,11 @@ function _stampNewQuestion(domain) {
 
   return {
     // itemId: String,
-    displayName: `dev question ${_.uniqueId()}`,
+    displayName: __DEV__ ? `dev question ${_.uniqueId()}` : '',
     description: '',
     solution: choices[0],
     feedback: '',
-    text: 'stamp new question',								// the actual text of the question
+    text: __DEV__ ? 'stamp new question' : '',								// the actual text of the question
     outcome: '',
     choices,
     domain: domain.id,

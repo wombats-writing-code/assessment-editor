@@ -19,7 +19,7 @@ export default function mappingReducer (state = initialState, action) {
     case GET_MAPPING_SUCCESS:
       return _.assign({}, state, {
         isGetMappingInProgress: false,
-        modules: _.filter(action.mapping.entities, {type: 'MODULE'}),
+        modules: _.sortBy(_.filter(action.mapping.entities, {type: 'MODULE'}), 'displayName'),
         outcomes: _.filter(action.mapping.entities, {type: 'OUTCOME'}),
         relationships: action.mapping.relationships,
       })

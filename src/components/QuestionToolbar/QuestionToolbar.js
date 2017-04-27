@@ -49,7 +49,7 @@ class QuestionToolbar extends Component {
               Copy &nbsp;
               <img src={require('./assets/copy.png')}/>
             </button>
-            <button className="button question__bar__button warning flex-container space-between align-center"
+            <button className="button question__bar__button flex-container space-between align-center"
                     onClick={() => this.setState({isConfirmDeleteVisible: true})}>
               Delete &nbsp;
               <img src={require('./assets/delete.png')}/>

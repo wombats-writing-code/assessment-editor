@@ -8,14 +8,23 @@ import './ModuleFolder.scss'
 
 class ModuleFolder extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isExpanded: false
+    }
+  }
+
   render() {
     let props = this.props;
 
     // console.log('props of module-folder', props)
 
+    let isExpanded = this.state.isExpanded || (props.currentModule && props.currentModule.id === props.module.id);
+
     let isSaveQuestionInProgressIndicator;
     let questions;
-    if (props.currentModule && props.currentModule.id === props.module.id) {
+    if (isExpanded) {
       // console.log('should render questions', props.questionsByModule[props.module.id])
       questions = (
         <ul>
@@ -38,24 +47,18 @@ class ModuleFolder extends Component {
     if (props.module.displayName !== 'Uncategorized') {
       visualizeTreeButton = (
         <img className="module-folder__tree" src={require('./assets/tree.png')}
-            onClick={() => props.onClickTree(props.module.id)}/>
+            onClick={(e) => {e.preventDefault(); e.stopPropagation(); props.onClickTree(props.module.id)}}/>
       )
     }
 
 
     return (
       <div className={props.className}>
-        <div className="module-folder__bar flex-container space-between">
+        <div className="module-folder__bar flex-container space-between" onClick={() => this._onClickModule(props.module)}>
           <p className="module-folder__title">{props.module.displayName}</p>
 
           <div className="flex-container">
-            <p className="module-folder__show-hide"
-              onClick={() => props.onClickModule(props.module)}>
-              {props.module.id === (props.currentModule ? props.currentModule.id : '') ? 'Hide' : 'Show'}
-            </p>
-
             {visualizeTreeButton}
-            
             <p className="module-folder__count">{props.questionsByModule[props.module.id].length} </p>
           </div>
         </div>
@@ -65,6 +68,13 @@ class ModuleFolder extends Component {
         {questions}
       </div>
     )
+  }
+
+  _onClickModule(module) {
+    this.props.onClickModule(module);
+    this.setState({
+      isExpanded: !this.state.isExpanded
+    })
   }
 }
 
