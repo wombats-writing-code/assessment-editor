@@ -18,6 +18,8 @@ class ModuleFolder extends Component {
   render() {
     let props = this.props;
 
+    if (!props.questionsByModule) return null;
+
     // console.log('props of module-folder', props)
 
     let isExpanded = this.state.isExpanded || (props.currentModule && props.currentModule.id === props.module.id);

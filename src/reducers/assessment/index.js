@@ -155,6 +155,7 @@ export default function assessmentReducer (state = initialState, action) {
 
           return q;
         }),
+        searchQuery: '',
         currentQuestion: action.question,
         isEditInProgress: false,
         editQuestionCopy: null
@@ -220,6 +221,7 @@ export default function assessmentReducer (state = initialState, action) {
 
           return q;
         }),
+        searchQuery: '',
         isLinkOutcomeInProgress: false,
         editQuestionCopy: null,
         currentQuestion: action.question,

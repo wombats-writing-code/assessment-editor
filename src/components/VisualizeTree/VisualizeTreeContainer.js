@@ -63,6 +63,8 @@ const visualizeEntitiesSelector = createSelector([
     entities = children;
   }
 
+  entities = _.compact(entities)
+
   let visualizeEntities = _.map(entities, entity => {
     let questionsForEntity = _.filter(questions, {outcome: entity.id});
 
