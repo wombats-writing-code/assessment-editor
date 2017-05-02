@@ -53,23 +53,11 @@ export default function assessmentReducer (state = initialState, action) {
       })
 
     case CHANGE_SEARCH_QUERY:
-      // let visibleModules =
-      let matchedQuestions = _.filter(action.questions, q => {
-        return search(action.query, q.displayName) || search(action.query, q.text);
-      })
-
-      // console.log('matchedQuestions', matchedQuestions);
-
-      // let matchedModules = _.compact(_.map(matchedQuestions, q => {
-      //   let module = _.find(action.questionsByModule, (questions) => questions.indexOf(q) > -1)
-      //   return module;
-      // }))
-      //
-      // console.log('matchedModules', matchedModules);
-
       return _.assign({}, state, {
         searchQuery: action.query,
-        matchedQuestions: matchedQuestions
+        matchedQuestions: _.filter(action.questions, q => {
+          return search(action.query, q.displayName) || search(action.query, q.text);
+        })
       })
 
     case SELECT_MODULE:
@@ -158,7 +146,10 @@ export default function assessmentReducer (state = initialState, action) {
         searchQuery: '',
         currentQuestion: action.question,
         isEditInProgress: false,
-        editQuestionCopy: null
+        editQuestionCopy: null,
+        matchedQuestions: _.filter(action.questions, q => {
+          return search(action.query, q.displayName) || search(action.query, q.text);
+        })
       })
 
     case LINK_OUTCOME:
@@ -225,7 +216,10 @@ export default function assessmentReducer (state = initialState, action) {
         isLinkOutcomeInProgress: false,
         editQuestionCopy: null,
         currentQuestion: action.question,
-        currentChoice: null
+        currentChoice: null,
+        matchedQuestions: _.filter(action.questions, q => {
+          return search(action.query, q.displayName) || search(action.query, q.text);
+        })
       })
 
     case CREATE_QUESTION_OPTIMISTIC:
@@ -237,6 +231,7 @@ export default function assessmentReducer (state = initialState, action) {
 
     case CREATE_QUESTION_SUCCESS:
       return _.assign({}, state, {
+        isEditInProgress: false,
         isSaveQuestionInProgress: false,
         questions: _.concat(action.question, state.questions)
       })
@@ -249,7 +244,10 @@ export default function assessmentReducer (state = initialState, action) {
     case DELETE_QUESTION_SUCCESS:
       return _.assign({}, state, {
         isDeleteQuestionInProgress: false,
-        questions: _.reject(state.questions, {id: action.question.id})
+        questions: _.reject(state.questions, {id: action.question.id}),
+        matchedQuestions: _.filter(action.questions, q => {
+          return search(action.query, q.displayName) || search(action.query, q.text);
+        })
       })
 
     case VISUALIZE_ENTITY:

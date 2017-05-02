@@ -27,7 +27,6 @@ export default (initialState = {}) => {
   }
 
   // copy state to local storage
-  if (__DEV__) {
     enhancers.push(persistState(null, {
       slicer: paths => state => {
         if (state) {
@@ -52,7 +51,6 @@ export default (initialState = {}) => {
         return state;
       },
     }))
-  }
 
 
   // ======================================================
