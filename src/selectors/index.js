@@ -57,7 +57,9 @@ export const questionsByModule = createSelector([
 
     result[module.id] = _.sortBy(_.filter(questions, q => {
       return moduleOutcomes.indexOf(q.outcome) > -1;
-    }), q => q.displayName.startsWith('Target'));
+    }), q => q.outcome);
+
+    // }), q => q.displayName.startsWith('Target'));
 
     result['Uncategorized'] = _.filter(questions, q => !q.outcome)
 
