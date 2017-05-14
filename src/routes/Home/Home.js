@@ -32,7 +32,7 @@ class Home extends Component {
       return null;
     }
 
-    let search, newQuestionButton;
+    let search, newQuestionButton, questionsCount;
     if (props.currentDomain && !props.isGetQuestionsInProgress) {
       search = (
         <div className="large-11 large-centered columns">
@@ -48,6 +48,16 @@ class Home extends Component {
                 onClick={() => props.onClickNewQuestion(props.currentDomain)}>
           + New question
         </button>
+      )
+
+      questionsCount = (
+        <div>
+          <p className="mute small">
+            <b>{props.questions.length}</b> questions &#47; &thinsp;
+            <b>{props.mapping.outcomes.length}</b> outcomes  &#47; &thinsp;
+            <b>{props.mapping.modules.length}</b> modules
+          </p>
+        </div>
       )
     }
 
@@ -107,6 +117,11 @@ class Home extends Component {
         </div>
         <div className="medium-7 columns">
           {newQuestionButton}
+        </div>
+      </div>
+      <div className="row questions-count">
+        <div className="columns">
+          {questionsCount}
         </div>
       </div>
 
