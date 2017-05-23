@@ -28,7 +28,7 @@ export const modulesByOutcome = createSelector([
 
     return _.reduce(mapping.outcomes, (result, outcome) => {
       let hasParent = _.find(mapping.relationships, {sourceId: outcome.id, type: 'HAS_PARENT_OF'});
-      if (!hasParent) return;
+      if (!hasParent) return result;
 
       let module = _.find(mapping.modules, {id: hasParent.targetId})
       result[outcome.id] = module;
