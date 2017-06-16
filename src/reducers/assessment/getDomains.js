@@ -25,7 +25,7 @@ export function getDomains(user) {
     dispatch(getDomainsOptimistic())
 
     return axios({
-      url: `${getHost()}/api/domains`,
+      url: `${getHost()}/api/domains?appKey=fbw`,
     })
     .then( res => {
       dispatch(getDomainsSuccess(res.data))

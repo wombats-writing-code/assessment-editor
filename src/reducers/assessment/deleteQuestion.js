@@ -28,7 +28,6 @@ export function deleteQuestion(question) {
     return axios({
       url: `${getHost()}/api/questions/${question._id}`,
       method: 'DELETE',
-      data: {question}
     })
     .then( res => {
       console.log('res.data', res.data);
